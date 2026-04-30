@@ -6,10 +6,17 @@ const resources = {
   ka: {
     translation: {
       portalTitle: 'შეზღუდული შესაძლებლობის მქონე პირთა სტატისტიკური პორტალი',
+      headerPortalTitle: 'შშმ პირთა სტატისტიკის პორტალი',
+      geoStatLogoAlt: 'საქსტატის ლოგო',
       home: 'მთავარი',
       about: 'პორტალის შესახებ',
       statistics: 'სტატისტიკა',
       services: 'სერვისები',
+      mainStatistics: 'სტატისტიკური ინფორმაცია',
+      legislation: 'კანონმდებლობა',
+      links: 'ბმულები',
+      glossary: 'გლოსარიუმი',
+      infographic: 'ინფოგრაფიკა',
       heroTitle: 'მონაცემები, რომლებიც აძლიერებს ინკლუზიურ გადაწყვეტილებებს',
       heroText:
         'პორტალი აერთიანებს მონაცემებს შეზღუდული შესაძლებლობის მქონე პირების შესახებ, რათა დაგეგმვა და მონიტორინგი იყოს უფრო ზუსტი და გამჭვირვალე.',
@@ -22,6 +29,19 @@ const resources = {
       servicesTitle: 'ხელმისაწვდომი სერვისები',
       servicesText:
         'გვერდი შეიცავს სერვისების კატალოგს, გზამკვლევს, და საკონტაქტო ინფორმაციას მხარდაჭერისთვის.',
+      mainStatisticsText:
+        'ამ სექციაში განთავსდება ქვეყნის მასშტაბით ძირითადი სტატისტიკური მაჩვენებლები შშმ პირების შესახებ.',
+      legislationText:
+        'აქ მოიძებნება შშმ პირთა უფლებებთან, მხარდაჭერასა და სერვისებთან დაკავშირებული საკანონმდებლო დოკუმენტები.',
+      linksText:
+        'სასარგებლო ბმულების სიაში შეგროვებულია ოფიციალური რესურსები, პარტნიორი ორგანიზაციები და დამატებითი ინფორმაცია.',
+      glossaryText:
+        'გლოსარიუმის გვერდი განმარტავს პორტალზე გამოყენებულ ძირითად ტერმინებსა და განმარტებებს.',
+      infographicText:
+        'ინფოგრაფიკის გვერდზე განთავსდება ვიზუალური მასალები, რომლებიც მონაცემებს მარტივად აღსაქმელს ხდის.',
+      fontSizeButton: 'ფონტის ზომა',
+      nightMode: 'ღამის რეჟიმი',
+      dayMode: 'დღის რეჟიმი',
       voiceEnabled: 'ხმოვანი ასისტენტი ჩართულია',
       voiceDisabled: 'ხმოვანი ასისტენტი გამორთულია',
       stopVoice: 'ხმის გაჩერება',
@@ -31,10 +51,17 @@ const resources = {
   en: {
     translation: {
       portalTitle: 'Statistical Portal on Persons with Disabilities',
+      headerPortalTitle: 'STATISTICAL PORTAL ON PERSONS WITH DISABILITIES',
+      geoStatLogoAlt: 'GeoStat logo',
       home: 'Home',
       about: 'About',
       statistics: 'Statistics',
       services: 'Services',
+      mainStatistics: 'MAIN STATISTICS',
+      legislation: 'LEGISLATION',
+      links: 'LINKS',
+      glossary: 'GLOSSARY',
+      infographic: 'INFOGRAPHIC',
       heroTitle: 'Data that supports inclusive decisions',
       heroText:
         'The portal combines disability-related data to improve planning, monitoring, and transparency.',
@@ -47,6 +74,19 @@ const resources = {
       servicesTitle: 'Available services',
       servicesText:
         'This section can provide a service catalog, guidance, and contact channels for support.',
+      mainStatisticsText:
+        'This section presents key country-level disability statistics and headline indicators.',
+      legislationText:
+        'This section includes core legal documents related to disability rights, support, and services.',
+      linksText:
+        'This section provides useful links to official sources, partner organizations, and additional resources.',
+      glossaryText:
+        'The glossary page explains key terms and definitions used throughout the portal.',
+      infographicText:
+        'The infographic page presents visual summaries to make statistical insights easier to understand.',
+      fontSizeButton: 'Font size',
+      nightMode: 'Night mode',
+      dayMode: 'Day mode',
       voiceEnabled: 'Voice assistant is enabled',
       voiceDisabled: 'Voice assistant is disabled',
       stopVoice: 'Stop voice',
