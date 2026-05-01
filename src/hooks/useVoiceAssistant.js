@@ -141,7 +141,7 @@ function transliterateGeorgianToLatin(text) {
 }
 
 export default function useVoiceAssistant(lang) {
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
   const lastSpokenRef = useRef("");
   const lastSpokenAtRef = useRef(0);
   const availableVoicesRef = useRef([]);
@@ -165,7 +165,9 @@ export default function useVoiceAssistant(lang) {
     const voices = availableVoicesRef.current;
 
     return (
-      voices.find((voice) => voice.lang?.toLowerCase() === normalizedSpeechLang) ||
+      voices.find(
+        (voice) => voice.lang?.toLowerCase() === normalizedSpeechLang,
+      ) ||
       voices.find((voice) =>
         voice.lang?.toLowerCase().startsWith(`${langPrefix}-`),
       ) ||
@@ -178,19 +180,14 @@ export default function useVoiceAssistant(lang) {
     return voices.find((voice) => voice.default) || voices[0] || null;
   }, []);
 
-  const hasVoiceForSpeechLang = useCallback(
-    (speechLang) => {
-      const normalized = speechLang.toLowerCase();
-      const prefix = normalized.split("-")[0];
-      return availableVoicesRef.current.some((voice) => {
-        const voiceLang = voice.lang?.toLowerCase();
-        return (
-          voiceLang === normalized || voiceLang?.startsWith(`${prefix}-`)
-        );
-      });
-    },
-    [],
-  );
+  const hasVoiceForSpeechLang = useCallback((speechLang) => {
+    const normalized = speechLang.toLowerCase();
+    const prefix = normalized.split("-")[0];
+    return availableVoicesRef.current.some((voice) => {
+      const voiceLang = voice.lang?.toLowerCase();
+      return voiceLang === normalized || voiceLang?.startsWith(`${prefix}-`);
+    });
+  }, []);
 
   const stop = useCallback(() => {
     playbackTokenRef.current += 1;
@@ -230,53 +227,56 @@ export default function useVoiceAssistant(lang) {
     [getFallbackVoice, getPreferredVoice],
   );
 
-  const playAudioUrl = useCallback((audioUrl, token, timeoutMs = PLAYBACK_TIMEOUT_MS) => {
-    return new Promise((resolve, reject) => {
-      if (token !== playbackTokenRef.current) {
-        resolve();
-        return;
-      }
-
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      let timeoutId = null;
-
-      const cleanup = () => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
+  const playAudioUrl = useCallback(
+    (audioUrl, token, timeoutMs = PLAYBACK_TIMEOUT_MS) => {
+      return new Promise((resolve, reject) => {
+        if (token !== playbackTokenRef.current) {
+          resolve();
+          return;
         }
-        audio.onended = null;
-        audio.onerror = null;
-        if (audioRef.current === audio) {
-          audioRef.current = null;
-        }
-      };
 
-      audio.onended = () => {
-        cleanup();
-        resolve();
-      };
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
+        let timeoutId = null;
 
-      audio.onerror = () => {
-        cleanup();
-        reject(new Error("Cloud TTS audio playback failed."));
-      };
+        const cleanup = () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+          audio.onended = null;
+          audio.onerror = null;
+          if (audioRef.current === audio) {
+            audioRef.current = null;
+          }
+        };
 
-      timeoutId = setTimeout(() => {
-        cleanup();
-        reject(new Error("Cloud TTS audio playback timed out."));
-      }, timeoutMs);
-
-      audio
-        .play()
-        .then(() => {})
-        .catch((error) => {
+        audio.onended = () => {
           cleanup();
-          reject(error);
-        });
-    });
-  }, []);
+          resolve();
+        };
+
+        audio.onerror = () => {
+          cleanup();
+          reject(new Error("Cloud TTS audio playback failed."));
+        };
+
+        timeoutId = setTimeout(() => {
+          cleanup();
+          reject(new Error("Cloud TTS audio playback timed out."));
+        }, timeoutMs);
+
+        audio
+          .play()
+          .then(() => {})
+          .catch((error) => {
+            cleanup();
+            reject(error);
+          });
+      });
+    },
+    [],
+  );
 
   const speakWithRemote = useCallback(
     async (text, remoteLang, token) => {
@@ -319,7 +319,9 @@ export default function useVoiceAssistant(lang) {
             }
             const translitSpoke = speakWithBrowser(transliterated, "en-US");
             if (!translitSpoke) {
-              throw new Error("Browser transliteration fallback is unavailable.");
+              throw new Error(
+                "Browser transliteration fallback is unavailable.",
+              );
             }
             return;
           }
