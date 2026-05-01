@@ -28,17 +28,12 @@ export default function LanguageSwitcher() {
   return (
     <button
       type="button"
-      className="m-0 inline-flex h-10 w-max cursor-pointer items-center justify-center p-0 leading-none text-xl transition hover:opacity-80"
+      className="m-0 inline-flex cursor-pointer items-center justify-center p-0 leading-none text-lg transition hover:opacity-80"
       onClick={() => setLanguage(nextLang)}
       aria-label={nextLabel}
       title={nextLabel}
     >
-      <ReactCountryFlag
-        countryCode={nextCountryCode}
-        svg
-        aria-hidden="true"
-        style={{ width: "1.4rem", height: "1.4rem" }}
-      />
+      <ReactCountryFlag countryCode={nextCountryCode} svg aria-hidden="true" />
     </button>
   );
 }
