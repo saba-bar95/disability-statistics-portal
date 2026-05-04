@@ -1,19 +1,16 @@
-import { Navigate } from 'react-router-dom'
-import MainLayout from '../layouts/MainLayout'
-import AboutPage from '../pages/AboutPage'
-import GlossaryPage from '../pages/GlossaryPage'
-import HomePage from '../pages/HomePage'
-import InfographicPage from '../pages/InfographicPage'
-import ServicesPage from '../pages/ServicesPage'
-import StatisticsPage from '../pages/StatisticsPage'
+import { Navigate } from "react-router-dom";
+import MainLayout from "../layouts/MainLayout";
+import GlossaryPage from "../pages/GlossaryPage";
+import HomePage from "../pages/HomePage";
+import InfographicPage from "../pages/InfographicPage";
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     element: <Navigate to="/ka" replace />,
   },
   {
-    path: '/:language',
+    path: "/:language",
     element: <MainLayout />,
     children: [
       {
@@ -21,31 +18,19 @@ const routes = [
         element: <HomePage />,
       },
       {
-        path: 'about',
-        element: <AboutPage />,
-      },
-      {
-        path: 'statistics',
-        element: <StatisticsPage />,
-      },
-      {
-        path: 'services',
-        element: <ServicesPage />,
-      },
-      {
-        path: 'glossary',
+        path: "glossary",
         element: <GlossaryPage />,
       },
       {
-        path: 'infographic',
+        path: "infographic",
         element: <InfographicPage />,
       },
     ],
   },
   {
-    path: '*',
+    path: "*",
     element: <Navigate to="/ka" replace />,
   },
-]
+];
 
-export default routes
+export default routes;
