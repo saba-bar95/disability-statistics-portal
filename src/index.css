@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @font-face {
   font-family: "bpg-nino";
   src: url("./assets/fonts/bpg_nino_mtavruli.ttf");
