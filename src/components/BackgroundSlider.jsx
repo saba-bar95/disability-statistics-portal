@@ -1,17 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import eduEn from "../assets/cover/edu-en.png";
 import eduGe from "../assets/cover/edu-ge.png";
 import healthEn from "../assets/cover/health-en.png";
 import healthGe from "../assets/cover/health-ge.png";
+import next1 from "../assets/images/slider/next1.png";
+import next2 from "../assets/images/slider/next2.png";
 import socEn from "../assets/cover/soc-en.png";
 import socGe from "../assets/cover/soc-ge.png";
 import sportEn from "../assets/cover/sport-en.png";
 import sportGe from "../assets/cover/sport-ge.png";
 
-const INTERVAL_MS = 6000;
+const INTERVAL_MS = 4000;
 
 /** Placeholder PDF; replace per slide with paths like `/documents/edu-ka.pdf` in public/. */
 const DEFAULT_SLIDE_PDF =
@@ -74,22 +75,141 @@ export default function BackgroundSlider() {
   const { t } = useTranslation();
   const slides = useMemo(() => slidesForLanguage(language), [language]);
   const [index, setIndex] = useState(0);
-  const active = slides[index] ?? slides[0];
+  const [incomingIndex, setIncomingIndex] = useState(null);
+  const [direction, setDirection] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const selectedIndex = incomingIndex ?? index;
+  const currentSlide = slides[index] ?? slides[0];
+  const nextSlide =
+    incomingIndex !== null ? (slides[incomingIndex] ?? null) : null;
+
+  const moveBy = useCallback(
+    (step) => {
+      if (isTransitioning) {
+        return;
+      }
+
+      const normalizedStep = step >= 0 ? 1 : -1;
+      const nextIndex =
+        (index + normalizedStep + slides.length) % slides.length;
+      setDirection(normalizedStep);
+      setIncomingIndex(nextIndex);
+      setIsTransitioning(true);
+    },
+    [index, isTransitioning, slides.length],
+  );
+
+  useEffect(() => {
+    if (!isTransitioning) {
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      setIsAnimating(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [isTransitioning]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
+      moveBy(1);
     }, INTERVAL_MS);
     return () => window.clearInterval(id);
-  }, [slides.length]);
+  }, [moveBy]);
 
   const goPrev = () => {
-    setIndex((i) => (i - 1 + slides.length) % slides.length);
+    moveBy(-1);
   };
 
   const goNext = () => {
-    setIndex((i) => (i + 1) % slides.length);
+    moveBy(1);
   };
+
+  const goToSlide = useCallback(
+    (targetIndex) => {
+      if (
+        isTransitioning ||
+        targetIndex < 0 ||
+        targetIndex >= slides.length ||
+        targetIndex === index
+      ) {
+        return;
+      }
+      setDirection(targetIndex > index ? 1 : -1);
+      setIncomingIndex(targetIndex);
+      setIsTransitioning(true);
+    },
+    [index, isTransitioning, slides.length],
+  );
+
+  const handleIncomingTransitionEnd = () => {
+    if (incomingIndex === null || !isAnimating) {
+      return;
+    }
+    setIndex(incomingIndex);
+    setIncomingIndex(null);
+    setIsAnimating(false);
+    setIsTransitioning(false);
+  };
+
+  const renderSlideContent = (slide, className, onTransitionEnd) => (
+    <div
+      className={`${className} absolute inset-0 h-full w-full`}
+      onTransitionEnd={onTransitionEnd}
+    >
+      <img
+        src={slide.src}
+        alt=""
+        className="h-full w-full object-cover"
+        aria-hidden
+      />
+
+      <div className="pointer-events-none absolute inset-0 z-30">
+        <div className="relative mx-auto h-full w-full max-w-[1800px]">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex w-1/2 translate-x-4 flex-col items-center justify-center px-3 sm:translate-x-6 sm:px-5 md:translate-x-8 md:px-8 lg:translate-x-10 lg:px-10">
+            <div className="pointer-events-auto flex w-[70%] max-w-full flex-col gap-8 sm:gap-10 md:gap-12">
+              <p className="text-xs leading-snug font-semibold text-balance text-white drop-shadow-sm sm:text-sm md:text-base lg:text-lg xl:text-xl">
+                {t(slide.aboutKey)}
+              </p>
+              <a
+                href={slide.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#fff" }}
+                className="inline-block text-xs font-medium text-blue-200 underline decoration-blue-200/80 underline-offset-2 transition hover:text-white hover:decoration-white sm:text-sm md:text-base"
+              >
+                {t("sliderPdfLink")}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const currentSlideClass = `z-20 ${
+    isTransitioning
+      ? "transition-transform duration-700 ease-in-out"
+      : "transition-none"
+  } ${
+    isAnimating
+      ? direction === 1
+        ? "-translate-x-full"
+        : "translate-x-full"
+      : "translate-x-0"
+  }`;
+
+  const incomingSlideClass = `z-10 ${
+    isTransitioning
+      ? "transition-transform duration-700 ease-in-out"
+      : "transition-none"
+  } ${
+    isAnimating
+      ? "translate-x-0"
+      : direction === 1
+        ? "translate-x-full"
+        : "-translate-x-full"
+  }`;
 
   return (
     <section
@@ -98,82 +218,66 @@ export default function BackgroundSlider() {
       aria-label="Portal highlights"
     >
       <div className="relative h-[clamp(9rem,26vh,12.5rem)] w-full overflow-hidden bg-slate-200 shadow-md sm:h-[clamp(10.5rem,30vh,15rem)] md:h-[clamp(12.5rem,36vh,18.5rem)] lg:h-[clamp(14rem,42vh,22rem)] xl:h-[clamp(16rem,48vh,26rem)] 2xl:h-[clamp(17rem,52vh,30rem)] dark:bg-slate-800">
-        {slides.map((slide, i) => (
-          <img
-            key={slide.id}
-            src={slide.src}
-            alt=""
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
-            aria-hidden={i !== index}
-          />
-        ))}
+        {renderSlideContent(currentSlide, currentSlideClass)}
 
-        <div
-          className="pointer-events-none absolute inset-0 bg-linear-to-r from-black/75 via-black/45 to-transparent"
-          aria-hidden="true"
-        />
+        {incomingIndex !== null &&
+          renderSlideContent(
+            nextSlide,
+            incomingSlideClass,
+            handleIncomingTransitionEnd,
+          )}
 
-        <div className="pointer-events-none absolute inset-y-0 left-2 flex w-[min(100%,26rem)] max-w-[min(92%,22rem)] flex-col justify-center px-3 sm:left-4 sm:w-[min(100%,28rem)] sm:max-w-[50%] sm:px-5 md:left-6 md:px-8 lg:left-8 lg:px-10">
-          <div className="pointer-events-auto flex max-w-full flex-col gap-4 sm:gap-5 md:gap-6">
-            <p className="text-xs leading-snug font-semibold text-balance text-white drop-shadow-sm sm:text-sm md:text-base lg:text-lg xl:text-xl">
-              {t(active.aboutKey)}
-            </p>
-            <a
-              href={active.pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-xs font-medium text-blue-200 underline decoration-blue-200/80 underline-offset-2 transition hover:text-white hover:decoration-white sm:text-sm md:text-base"
-            >
-              {t("sliderPdfLink")}
-            </a>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="absolute top-1/2 left-1 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white shadow-md backdrop-blur-sm transition hover:bg-black/60 sm:left-2 sm:h-9 sm:w-9 md:left-3 md:h-10 md:w-10 lg:h-11 lg:w-11"
-          aria-label={t("sliderPrev")}
-          onClick={goPrev}
-        >
-          <MdChevronLeft
-            className="text-xl sm:text-2xl lg:text-3xl"
-            aria-hidden
-          />
-        </button>
-        <button
-          type="button"
-          className="absolute top-1/2 right-1 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white shadow-md backdrop-blur-sm transition hover:bg-black/60 sm:right-2 sm:h-9 sm:w-9 md:right-3 md:h-10 md:w-10 lg:h-11 lg:w-11"
-          aria-label={t("sliderNext")}
-          onClick={goNext}
-        >
-          <MdChevronRight
-            className="text-xl sm:text-2xl lg:text-3xl"
-            aria-hidden
-          />
-        </button>
-
-        <div
-          className="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 sm:bottom-3 sm:gap-2 md:bottom-4"
-          role="tablist"
-          aria-label="Slide indicators"
-        >
-          {slides.map((slide, i) => (
+        <div className="pointer-events-none absolute inset-0 z-40">
+          <div className="relative mx-auto h-full w-full max-w-[1800px]">
             <button
-              key={slide.id}
               type="button"
-              role="tab"
-              aria-selected={i === index}
-              aria-label={`Slide ${i + 1}`}
-              className={`rounded-full transition-colors ${
-                i === index
-                  ? "h-2 w-2 bg-white shadow-sm sm:h-2.5 sm:w-2.5 dark:bg-blue-300"
-                  : "h-1.5 w-1.5 bg-white/50 hover:bg-white/80 sm:h-2 sm:w-2 dark:bg-slate-500 dark:hover:bg-slate-400"
-              }`}
-              onClick={() => setIndex(i)}
-            />
-          ))}
+              className="pointer-events-auto absolute top-1/2 left-1 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center opacity-65 transition-opacity hover:opacity-100 sm:left-2 sm:h-14 sm:w-14 md:left-3 md:h-16 md:w-16 lg:h-20 lg:w-20"
+              aria-label={t("sliderPrev")}
+              onClick={goPrev}
+            >
+              <img
+                src={next1}
+                alt=""
+                className="h-7 w-7 object-contain sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12"
+                aria-hidden
+              />
+            </button>
+            <button
+              type="button"
+              className="pointer-events-auto absolute top-1/2 right-1 flex h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center opacity-65 transition-opacity hover:opacity-100 sm:right-2 sm:h-14 sm:w-14 md:right-3 md:h-16 md:w-16 lg:h-20 lg:w-20"
+              aria-label={t("sliderNext")}
+              onClick={goNext}
+            >
+              <img
+                src={next2}
+                alt=""
+                className="h-7 w-7 object-contain sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12"
+                aria-hidden
+              />
+            </button>
+
+            <div
+              className="pointer-events-auto absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-3 sm:gap-2 md:bottom-4"
+              role="tablist"
+              aria-label="Slide indicators"
+            >
+              {slides.map((slide, i) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  role="tab"
+                  className={`cursor-pointer rounded-full transition-colors ${
+                    i === selectedIndex
+                      ? "h-2 w-4 border border-amber-400 bg-amber-400 shadow-sm sm:h-2.5 sm:w-5"
+                      : "h-2 w-2 border border-amber-400 bg-transparent hover:bg-[oklch(82.8%_0.189_84.429/0.3)] sm:h-2.5 sm:w-2.5"
+                  }`}
+                  aria-selected={i === selectedIndex}
+                  aria-label={`Slide ${i + 1}`}
+                  onClick={() => goToSlide(i)}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

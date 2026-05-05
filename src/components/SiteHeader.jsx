@@ -31,10 +31,14 @@ export default function SiteHeader() {
   const activeHash = location.hash;
 
   return (
-    <header className="max-[1360px]:item flex flex-col justify-between gap-5 px-5 py-6 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
+    <header className="max-[1360px]:item m-auto flex max-w-[1800px] flex-col justify-between gap-5 px-5 py-6 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
       <div className="flex items-center justify-center gap-4">
         <img src={logoSrc} alt={t("geoStatLogoAlt")} className={"max-h-11"} />
-        <h1 className="max-w-xl min-w-[200px] text-base leading-tight font-semibold text-slate-900 uppercase sm:text-lg dark:text-slate-100">
+        <h1
+          className={`max-w-xl min-w-[200px] text-base leading-tight font-semibold uppercase sm:text-lg ${
+            theme === "dark" ? "text-slate-100" : "text-slate-900"
+          }`}
+        >
           {t("headerPortalTitle")}
         </h1>
       </div>

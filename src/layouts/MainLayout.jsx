@@ -21,7 +21,7 @@ export default function MainLayout() {
   }, [i18n, language, navigate]);
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[1800px]">
+    <div className="mx-auto min-h-screen w-full">
       <SiteHeader />
       <BackgroundSlider key={language} />
       <main className="grid gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20">
