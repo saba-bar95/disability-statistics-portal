@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -24,18 +24,43 @@ export default function SiteHeader() {
   const { fontScale, increaseFontSize, theme, toggleTheme } =
     useUiPreferences();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const mobileNavContainerRef = useRef(null);
   const logoSrc = language === "ka" ? kaLogo : enLogo;
   const isHomeRoute =
     location.pathname === `/${language}` ||
     location.pathname === `/${language}/`;
   const activeHash = location.hash;
 
+  useEffect(() => {
+    if (!isMobileNavOpen) {
+      return;
+    }
+
+    const handlePointerOutside = (event) => {
+      if (!mobileNavContainerRef.current) {
+        return;
+      }
+
+      if (!mobileNavContainerRef.current.contains(event.target)) {
+        setIsMobileNavOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerOutside);
+    document.addEventListener("touchstart", handlePointerOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerOutside);
+      document.removeEventListener("touchstart", handlePointerOutside);
+    };
+  }, [isMobileNavOpen]);
+
   return (
-    <header className="max-[1360px]:item m-auto flex max-w-[1800px] flex-col justify-between gap-5 px-5 py-6 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
+    <header className="max-[1360px]:item m-auto flex max-w-[1800px] flex-col justify-between gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
       <div className="flex items-center justify-center gap-4">
         <img src={logoSrc} alt={t("geoStatLogoAlt")} className={"max-h-11"} />
         <h1
-          className={`max-w-xl min-w-[200px] text-base leading-tight font-semibold uppercase sm:text-lg ${
+          className={`max-w-xl min-w-[200px] text-sm leading-tight font-semibold uppercase sm:text-base ${
             theme === "dark" ? "text-slate-100" : "text-slate-900"
           }`}
         >
@@ -44,7 +69,7 @@ export default function SiteHeader() {
       </div>
 
       <div className="flex w-full flex-row items-start justify-center gap-3 max-[1360px]:flex-col max-[1360px]:items-end max-md:flex-row max-md:items-center max-md:gap-5 min-[1360px]:gap-10 md:max-lg:items-center lg:w-auto lg:justify-end">
-        <div className="relative flex">
+        <div ref={mobileNavContainerRef} className="relative flex">
           <button
             type="button"
             className="cursor-pointer text-slate-700 md:hidden dark:text-slate-300"
@@ -58,12 +83,12 @@ export default function SiteHeader() {
             )}
           </button>
           <nav
-            className={`${isMobileNavOpen ? "max-md:flex" : "max-md:hidden"} max-md:absolute max-md:top-full max-md:right-0 max-md:z-20 max-md:mt-2 max-md:w-max max-md:flex-col max-md:gap-2 max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end max-md:dark:border-slate-700 max-md:dark:bg-slate-900 max-md:dark:text-slate-200`}
+            className={`${isMobileNavOpen ? "max-md:flex" : "max-md:hidden"} max-md:absolute max-md:top-full max-md:left-full max-md:right-auto max-md:z-50 max-md:mt-2 max-md:ml-2 max-md:min-w-48 max-md:max-w-[calc(100vw-1rem)] max-md:flex-col max-md:gap-2 max-md:overflow-x-auto max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end max-md:dark:border-slate-700 max-md:dark:bg-slate-900 max-md:dark:text-slate-200`}
           >
             <a
               href={`/${language}#main-statistics`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max border-b-2 pb-2 text-xs font-bold md:text-sm xl:text-base ${
+              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
                 isHomeRoute && activeHash === "#main-statistics"
                   ? "border-current text-blue-700 dark:text-blue-300"
                   : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
@@ -74,7 +99,7 @@ export default function SiteHeader() {
             <a
               href={`/${language}#legislation`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max border-b-2 pb-2 text-xs font-bold md:text-sm xl:text-base ${
+              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
                 isHomeRoute && activeHash === "#legislation"
                   ? "border-current text-blue-700 dark:text-blue-300 "
                   : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
@@ -85,7 +110,7 @@ export default function SiteHeader() {
             <a
               href={`/${language}#links`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max border-b-2 pb-2 text-xs font-bold md:text-sm xl:text-base ${
+              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
                 isHomeRoute && activeHash === "#links"
                   ? "border-current text-blue-700 dark:text-blue-300"
                   : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
@@ -97,7 +122,7 @@ export default function SiteHeader() {
               to={`/${language}/glossary`}
               onClick={() => setIsMobileNavOpen(false)}
               className={({ isActive }) =>
-                `w-max border-b-2 pb-2 text-xs font-bold md:text-sm xl:text-base ${
+                `w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
                   isActive
                     ? "border-current text-blue-700 dark:text-blue-300"
                     : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
@@ -110,7 +135,7 @@ export default function SiteHeader() {
               to={`/${language}/infographic`}
               onClick={() => setIsMobileNavOpen(false)}
               className={({ isActive }) =>
-                `w-max border-b-2 pb-2 text-xs font-bold md:text-sm xl:text-base ${
+                `w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
                   isActive
                     ? "border-current text-blue-700 dark:text-blue-300"
                     : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"

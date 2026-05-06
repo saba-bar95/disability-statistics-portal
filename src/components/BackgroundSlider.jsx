@@ -217,7 +217,7 @@ export default function BackgroundSlider() {
       aria-roledescription="carousel"
       aria-label="Portal highlights"
     >
-      <div className="relative h-[clamp(9rem,26vh,12.5rem)] w-full overflow-hidden bg-slate-200 shadow-md sm:h-[clamp(10.5rem,30vh,15rem)] md:h-[clamp(12.5rem,36vh,18.5rem)] lg:h-[clamp(14rem,42vh,22rem)] xl:h-[clamp(16rem,48vh,26rem)] 2xl:h-[clamp(17rem,52vh,30rem)] dark:bg-slate-800">
+      <div className="relative h-[clamp(13rem,38vh,18rem)] w-full overflow-hidden bg-slate-200 shadow-md sm:h-[clamp(15rem,42vh,21rem)] md:h-[clamp(17rem,48vh,25rem)] lg:h-[clamp(19rem,54vh,30rem)] xl:h-[clamp(22rem,60vh,35rem)] 2xl:h-[clamp(24rem,64vh,40rem)] dark:bg-slate-800">
         {renderSlideContent(currentSlide, currentSlideClass)}
 
         {incomingIndex !== null &&
