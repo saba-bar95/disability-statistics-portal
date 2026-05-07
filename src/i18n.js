@@ -47,15 +47,11 @@ const resources = {
       stopVoice: "ხმის გაჩერება",
       voiceHint:
         "ტექსტზე მაუსის მიტანისას ან დაკლიკებისას სისტემა ხმამაღლა წაიკითხავს კონტენტს.",
-      sliderEduAbout:
-        "განათლება — შშმ მოსწავლეებისა და სწავლების გარემოს სტატისტიკური მიმოხილვა.",
-      sliderHealthAbout:
-        "ჯანდაცვა — სერვისებზე წვდომა და ჯანმრთელობასთან დაკავშირებული მაჩვენებლები.",
-      sliderSocAbout:
-        "სოციალური დაცვა — სოციალური პაკეტები, დახმარება და ცხოვრების ხარისხი.",
-      sliderSportAbout:
-        "სპორტი — პარალიმპიური მიმართულებები და სპორტული ჩართულობის მონაცემები.",
-      sliderPdfLink: "დეტალური დოკუმენტი (PDF)",
+      sliderEduAbout: "განათლება",
+      sliderHealthAbout: "ჯანმრთელობის დაცვა",
+      sliderSocAbout: "სოციალური უზრუნველყოფა, კეთილდღეობა, უსაფრთხოება",
+      sliderSportAbout: "სპორტი",
+      sliderPdfLink: "ინფოგრაფიკა",
       sliderPrev: "წინა სლაიდი",
       sliderNext: "შემდეგი სლაიდი",
     },
@@ -104,15 +100,11 @@ const resources = {
       stopVoice: "Stop voice",
       voiceHint:
         "When you hover or click text, the system reads the related content aloud.",
-      sliderEduAbout:
-        "Education — headline statistics on students with disabilities and the learning environment.",
-      sliderHealthAbout:
-        "Healthcare — access to services and key health-related disability indicators.",
-      sliderSocAbout:
-        "Social protection — social packages, allowances, and quality-of-life measures.",
-      sliderSportAbout:
-        "Sport — Paralympic-related participation and sports inclusion data.",
-      sliderPdfLink: "Full document (PDF)",
+      sliderEduAbout: "Education",
+      sliderHealthAbout: "HEALTHCARE",
+      sliderSocAbout: "SOCIAL SECURITY, WELL-BEING AND SAFETY",
+      sliderSportAbout: "SPORT",
+      sliderPdfLink: "Infographic",
       sliderPrev: "Previous slide",
       sliderNext: "Next slide",
     },

@@ -56,7 +56,7 @@ export default function SiteHeader() {
   }, [isMobileNavOpen]);
 
   return (
-    <header className="max-[1360px]:item m-auto flex max-w-[1800px] flex-col justify-between gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
+    <header className="max-[1360px]:item mx-auto flex w-full max-w-[1800px] flex-col justify-between gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
       <div className="flex items-center justify-center gap-4">
         <img src={logoSrc} alt={t("geoStatLogoAlt")} className={"max-h-11"} />
         <h1
