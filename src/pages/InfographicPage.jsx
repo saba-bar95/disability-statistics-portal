@@ -1,12 +1,16 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
 
 export default function InfographicPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <h2 className="mb-2 text-xl font-semibold text-slate-800 dark:text-slate-100">{t('infographic')}</h2>
-      <p className="text-slate-700 dark:text-slate-300">{t('infographicText')}</p>
+      <h2 className="mb-2 text-xl font-semibold text-slate-800 dark:text-slate-100">
+        {t("infographic")}
+      </h2>
+      <p className="text-slate-700 dark:text-slate-300">
+        {t("infographicText")}
+      </p>
     </section>
-  )
+  );
 }

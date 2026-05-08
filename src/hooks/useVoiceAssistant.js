@@ -10,53 +10,14 @@ const INTERACTIVE_TAGS = new Set([
   "LI",
   "SPAN",
 ]);
-const VOICE_LANG_MAP = {
-  ka: "ka-GE",
-  en: "en-US",
-};
-const CLOUD_TTS_LANG_MAP = {
-  ka: null,
+const TTS_API_URL = "https://tts-api.geostat.ge/request";
+const TTS_API_LANG_MAP = {
+  ka: "ka",
   en: "en",
 };
-const GOOGLE_TTS_MAX_CHARS = 180;
+const TTS_MAX_CHARS = 220;
 const HOVER_SPEAK_DELAY_MS = 350;
 const PLAYBACK_TIMEOUT_MS = 7000;
-const GEORGIAN_CHARS = /[\u10A0-\u10FF]/;
-const GEORGIAN_TO_LATIN_MAP = {
-  ა: "a",
-  ბ: "b",
-  გ: "g",
-  დ: "d",
-  ე: "e",
-  ვ: "v",
-  ზ: "z",
-  თ: "t",
-  ი: "i",
-  კ: "k",
-  ლ: "l",
-  მ: "m",
-  ნ: "n",
-  ო: "o",
-  პ: "p",
-  ჟ: "zh",
-  რ: "r",
-  ს: "s",
-  ტ: "t",
-  უ: "u",
-  ფ: "p",
-  ქ: "k",
-  ღ: "gh",
-  ყ: "q",
-  შ: "sh",
-  ჩ: "ch",
-  ც: "ts",
-  ძ: "dz",
-  წ: "ts",
-  ჭ: "ch",
-  ხ: "kh",
-  ჯ: "j",
-  ჰ: "h",
-};
 
 function asElement(target) {
   if (!target) {
@@ -70,7 +31,7 @@ function asElement(target) {
   return target instanceof Element ? target : null;
 }
 
-function splitTextForTts(text, chunkSize = GOOGLE_TTS_MAX_CHARS) {
+function splitTextForTts(text, chunkSize = TTS_MAX_CHARS) {
   const normalized = text.replace(/\s+/g, " ").trim();
   if (!normalized) {
     return [];
@@ -103,17 +64,6 @@ function splitTextForTts(text, chunkSize = GOOGLE_TTS_MAX_CHARS) {
   return chunks;
 }
 
-function buildGoogleTtsUrl(text, langCode) {
-  const params = new URLSearchParams({
-    ie: "UTF-8",
-    client: "tw-ob",
-    tl: langCode,
-    q: text,
-  });
-
-  return `https://translate.googleapis.com/translate_tts?${params.toString()}`;
-}
-
 function extractReadableText(target) {
   const element = asElement(target);
 
@@ -133,18 +83,10 @@ function extractReadableText(target) {
   return (element.textContent || "").replace(/\s+/g, " ").trim();
 }
 
-function transliterateGeorgianToLatin(text) {
-  return text
-    .split("")
-    .map((char) => GEORGIAN_TO_LATIN_MAP[char] || char)
-    .join("");
-}
-
 export default function useVoiceAssistant(lang) {
   const [isEnabled, setIsEnabled] = useState(false);
   const lastSpokenRef = useRef("");
   const lastSpokenAtRef = useRef(0);
-  const availableVoicesRef = useRef([]);
   const audioRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const hoverTimeoutRef = useRef(null);
@@ -153,41 +95,9 @@ export default function useVoiceAssistant(lang) {
     const normalizedLang = lang === "ka" || lang === "en" ? lang : "en";
     return {
       uiLang: normalizedLang,
-      speechLang: VOICE_LANG_MAP[normalizedLang],
-      remoteLang: CLOUD_TTS_LANG_MAP[normalizedLang],
+      remoteLang: TTS_API_LANG_MAP[normalizedLang],
     };
   }, [lang]);
-
-  const getPreferredVoice = useCallback(() => {
-    const { speechLang } = getLanguageConfig();
-    const normalizedSpeechLang = speechLang.toLowerCase();
-    const langPrefix = normalizedSpeechLang.split("-")[0];
-    const voices = availableVoicesRef.current;
-
-    return (
-      voices.find(
-        (voice) => voice.lang?.toLowerCase() === normalizedSpeechLang,
-      ) ||
-      voices.find((voice) =>
-        voice.lang?.toLowerCase().startsWith(`${langPrefix}-`),
-      ) ||
-      null
-    );
-  }, [getLanguageConfig]);
-
-  const getFallbackVoice = useCallback(() => {
-    const voices = availableVoicesRef.current;
-    return voices.find((voice) => voice.default) || voices[0] || null;
-  }, []);
-
-  const hasVoiceForSpeechLang = useCallback((speechLang) => {
-    const normalized = speechLang.toLowerCase();
-    const prefix = normalized.split("-")[0];
-    return availableVoicesRef.current.some((voice) => {
-      const voiceLang = voice.lang?.toLowerCase();
-      return voiceLang === normalized || voiceLang?.startsWith(`${prefix}-`);
-    });
-  }, []);
 
   const stop = useCallback(() => {
     playbackTokenRef.current += 1;
@@ -204,28 +114,6 @@ export default function useVoiceAssistant(lang) {
       window.speechSynthesis.cancel();
     }
   }, []);
-
-  const speakWithBrowser = useCallback(
-    (text, speechLang) => {
-      if (!window.speechSynthesis) {
-        return false;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      const preferredVoice = getPreferredVoice();
-      const fallbackVoice = getFallbackVoice();
-      const selectedVoice = preferredVoice || fallbackVoice;
-
-      utterance.lang = selectedVoice?.lang || speechLang;
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-      return true;
-    },
-    [getFallbackVoice, getPreferredVoice],
-  );
 
   const playAudioUrl = useCallback(
     (audioUrl, token, timeoutMs = PLAYBACK_TIMEOUT_MS) => {
@@ -289,7 +177,11 @@ export default function useVoiceAssistant(lang) {
           return false;
         }
 
-        const audioUrl = buildGoogleTtsUrl(chunkText, remoteLang);
+        const params = new URLSearchParams({
+          text: chunkText,
+          lang: remoteLang,
+        });
+        const audioUrl = `${TTS_API_URL}?${params.toString()}`;
         await playAudioUrl(audioUrl, token);
       }
       return true;
@@ -299,42 +191,8 @@ export default function useVoiceAssistant(lang) {
 
   const speakWithFallbacks = useCallback(
     async (text, languageConfig, token) => {
-      const isGeorgian = languageConfig.uiLang === "ka";
       try {
-        if (isGeorgian) {
-          const hasGeorgianVoice = hasVoiceForSpeechLang(
-            languageConfig.speechLang,
-          );
-          if (import.meta.env.DEV) {
-            console.info(
-              `[voice-assistant] provider=browser ui=${languageConfig.uiLang} speech=${languageConfig.speechLang} voiceMatch=${hasGeorgianVoice}`,
-            );
-          }
-          if (!hasGeorgianVoice && GEORGIAN_CHARS.test(text)) {
-            const transliterated = transliterateGeorgianToLatin(text);
-            if (import.meta.env.DEV) {
-              console.info(
-                `[voice-assistant] provider=browser-translit ui=${languageConfig.uiLang} speech=en-US`,
-              );
-            }
-            const translitSpoke = speakWithBrowser(transliterated, "en-US");
-            if (!translitSpoke) {
-              throw new Error(
-                "Browser transliteration fallback is unavailable.",
-              );
-            }
-            return;
-          }
-
-          const spoke = speakWithBrowser(text, languageConfig.speechLang);
-          if (!spoke) {
-            throw new Error("Browser speech synthesis is unavailable.");
-          }
-          return;
-        }
-
         if (import.meta.env.DEV) {
-          // Helps debug which provider path was used.
           console.info(
             `[voice-assistant] provider=remote ui=${languageConfig.uiLang} remote=${languageConfig.remoteLang}`,
           );
@@ -346,13 +204,12 @@ export default function useVoiceAssistant(lang) {
         }
         if (import.meta.env.DEV) {
           console.info(
-            `[voice-assistant] provider=fallback-browser ui=${languageConfig.uiLang} speech=${languageConfig.speechLang}`,
+            `[voice-assistant] provider=remote-failed ui=${languageConfig.uiLang} remote=${languageConfig.remoteLang}`,
           );
         }
-        speakWithBrowser(text, languageConfig.speechLang);
       }
     },
-    [hasVoiceForSpeechLang, speakWithBrowser, speakWithRemote],
+    [speakWithRemote],
   );
 
   const speak = useCallback(
@@ -376,9 +233,6 @@ export default function useVoiceAssistant(lang) {
 
       const token = playbackTokenRef.current + 1;
       playbackTokenRef.current = token;
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
 
       Promise.resolve().then(() =>
         speakWithFallbacks(cleaned, languageConfig, token),
@@ -386,23 +240,6 @@ export default function useVoiceAssistant(lang) {
     },
     [getLanguageConfig, isEnabled, speakWithFallbacks],
   );
-
-  useEffect(() => {
-    if (!window.speechSynthesis) {
-      return undefined;
-    }
-
-    const loadVoices = () => {
-      availableVoicesRef.current = window.speechSynthesis.getVoices();
-    };
-
-    loadVoices();
-    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
-
-    return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", loadVoices);
-    };
-  }, []);
 
   useEffect(() => {
     const onHover = (event) => {

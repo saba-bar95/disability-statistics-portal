@@ -39,6 +39,14 @@ const resources = {
         "გლოსარიუმის გვერდი განმარტავს პორტალზე გამოყენებულ ძირითად ტერმინებსა და განმარტებებს.",
       infographicText:
         "ინფოგრაფიკის გვერდზე განთავსდება ვიზუალური მასალები, რომლებიც მონაცემებს მარტივად აღსაქმელს ხდის.",
+      educationPageText:
+        "ამ გვერდზე განთავსდება განათლებასთან დაკავშირებული ძირითადი სტატისტიკური ინფორმაცია შშმ პირებისთვის.",
+      healthcarePageText:
+        "ამ გვერდზე განთავსდება ჯანმრთელობის დაცვისა და სერვისებზე ხელმისაწვდომობის მაჩვენებლები.",
+      socialSecurityPageText:
+        "ამ გვერდზე განთავსდება სოციალური უზრუნველყოფის, კეთილდღეობისა და უსაფრთხოების მაჩვენებლები.",
+      sportPageText:
+        "ამ გვერდზე განთავსდება სპორტთან დაკავშირებული სტატისტიკური ინფორმაცია და ინდიკატორები.",
       fontSizeButton: "ფონტის ზომა",
       nightMode: "ღამის რეჟიმი",
       dayMode: "დღის რეჟიმი",
@@ -92,6 +100,14 @@ const resources = {
         "The glossary page explains key terms and definitions used throughout the portal.",
       infographicText:
         "The infographic page presents visual summaries to make statistical insights easier to understand.",
+      educationPageText:
+        "This page presents key disability-related statistics and indicators for education.",
+      healthcarePageText:
+        "This page presents indicators on healthcare and accessibility of health services.",
+      socialSecurityPageText:
+        "This page presents indicators on social security, well-being, and safety.",
+      sportPageText:
+        "This page presents disability-related statistics and indicators for sport.",
       fontSizeButton: "Font size",
       nightMode: "Night mode",
       dayMode: "Day mode",

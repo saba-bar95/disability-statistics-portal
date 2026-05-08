@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 import eduEn from "../assets/cover/edu-en.png";
 import eduGe from "../assets/cover/edu-ge.png";
 import healthEn from "../assets/cover/health-en.png";
@@ -183,7 +184,7 @@ export default function BackgroundSlider() {
 
   const renderSlideContent = (slide, className, onTransitionEnd) => (
     <div
-      className={`${className} absolute inset-0 h-full w-full`}
+      className={clsx(className, "absolute inset-0 h-full w-full")}
       onTransitionEnd={onTransitionEnd}
     >
       <img
@@ -194,11 +195,26 @@ export default function BackgroundSlider() {
       />
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <div className="relative mx-auto h-full w-full max-w-[1800px] px-5 lg:px-10 xl:px-15 2xl:px-20">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex w-1/2 translate-x-4 flex-col items-center justify-center px-3 sm:translate-x-6 sm:px-5 md:translate-x-8 md:px-8 lg:translate-x-10 lg:px-10">
+        <div
+          className={clsx(
+            "relative mx-auto h-full w-full max-w-[1800px] px-5 lg:px-10",
+            "xl:px-15 2xl:px-20",
+          )}
+        >
+          <div
+            className={clsx(
+              "pointer-events-none absolute inset-y-0 left-0 flex w-1/2",
+              "translate-x-4 flex-col items-center justify-center px-3",
+              "sm:translate-x-6 sm:px-5 md:translate-x-8 md:px-8",
+              "lg:translate-x-10 lg:px-10",
+            )}
+          >
             <div className="pointer-events-auto flex w-[70%] max-w-full flex-col gap-8 sm:gap-14 md:gap-20">
               <p
-                className="text-base leading-snug font-semibold text-balance drop-shadow-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
+                className={clsx(
+                  "text-base leading-snug font-semibold text-balance drop-shadow-sm",
+                  "sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
+                )}
                 style={{ color: SLIDE_TEXT_COLORS[slide.id] ?? "#FFFFFF" }}
               >
                 {t(slide.aboutKey)}
@@ -208,7 +224,13 @@ export default function BackgroundSlider() {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#fff" }}
-                className="inline-block w-max border border-white px-3 py-1.5 text-xs font-medium text-blue-200 uppercase underline decoration-blue-200/80 underline-offset-2 transition hover:text-white hover:decoration-white sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2.5 md:text-base lg:px-6 lg:py-3"
+                className={clsx(
+                  "inline-block w-max border border-white px-3 py-1.5 text-xs",
+                  "font-medium text-blue-200 uppercase underline",
+                  "decoration-blue-200/80 underline-offset-2 transition",
+                  "hover:text-white hover:decoration-white sm:px-4 sm:py-2",
+                  "sm:text-sm md:px-5 md:py-2.5 md:text-base lg:px-6 lg:py-3",
+                )}
               >
                 {t("sliderPdfLink")}
               </a>
@@ -219,29 +241,29 @@ export default function BackgroundSlider() {
     </div>
   );
 
-  const currentSlideClass = `z-20 ${
+  const currentSlideClass = clsx(
+    "z-20",
     isTransitioning
       ? "transition-transform duration-700 ease-in-out"
-      : "transition-none"
-  } ${
+      : "transition-none",
     isAnimating
       ? direction === 1
         ? "-translate-x-full"
         : "translate-x-full"
-      : "translate-x-0"
-  }`;
+      : "translate-x-0",
+  );
 
-  const incomingSlideClass = `z-10 ${
+  const incomingSlideClass = clsx(
+    "z-10",
     isTransitioning
       ? "transition-transform duration-700 ease-in-out"
-      : "transition-none"
-  } ${
+      : "transition-none",
     isAnimating
       ? "translate-x-0"
       : direction === 1
         ? "translate-x-full"
-        : "-translate-x-full"
-  }`;
+        : "-translate-x-full",
+  );
 
   return (
     <section
@@ -249,7 +271,14 @@ export default function BackgroundSlider() {
       aria-roledescription="carousel"
       aria-label="Portal highlights"
     >
-      <div className="relative h-[clamp(13rem,38vh,18rem)] w-full overflow-hidden bg-slate-200 shadow-md sm:h-[clamp(15rem,42vh,21rem)] md:h-[clamp(17rem,48vh,25rem)] lg:h-[clamp(19rem,54vh,30rem)] xl:h-[clamp(22rem,60vh,35rem)] 2xl:h-[clamp(24rem,64vh,40rem)] dark:bg-slate-800">
+      <div
+        className={clsx(
+          "relative h-[clamp(13rem,38vh,18rem)] w-full overflow-hidden bg-slate-200",
+          "shadow-md sm:h-[clamp(15rem,42vh,21rem)] md:h-[clamp(17rem,48vh,25rem)]",
+          "lg:h-[clamp(19rem,54vh,30rem)] xl:h-[clamp(22rem,60vh,35rem)]",
+          "2xl:h-[clamp(24rem,64vh,40rem)] dark:bg-slate-800",
+        )}
+      >
         {renderSlideContent(currentSlide, currentSlideClass)}
 
         {incomingIndex !== null &&
@@ -261,10 +290,19 @@ export default function BackgroundSlider() {
 
         <div className="pointer-events-none absolute inset-0 z-40">
           <div className="relative mx-auto h-full w-full max-w-[1800px]">
-            <div className="absolute inset-x-0 inset-y-0 flex items-center justify-between px-5 lg:px-10 xl:px-15 2xl:px-20">
+            <div
+              className={clsx(
+                "absolute inset-x-0 inset-y-0 flex items-center justify-between",
+                "px-5 lg:px-10 xl:px-15 2xl:px-20",
+              )}
+            >
               <button
                 type="button"
-                className="pointer-events-auto h-12 w-12 cursor-pointer items-center justify-center opacity-65 transition-opacity hover:opacity-100 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20"
+                className={clsx(
+                  "pointer-events-auto h-12 w-12 cursor-pointer items-center",
+                  "justify-center opacity-65 transition-opacity hover:opacity-100",
+                  "sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20",
+                )}
                 aria-label={t("sliderPrev")}
                 onClick={goPrev}
               >
@@ -277,7 +315,11 @@ export default function BackgroundSlider() {
               </button>
               <button
                 type="button"
-                className="pointer-events-auto h-12 w-12 cursor-pointer items-center justify-center opacity-65 transition-opacity hover:opacity-100 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20"
+                className={clsx(
+                  "pointer-events-auto h-12 w-12 cursor-pointer items-center",
+                  "justify-center opacity-65 transition-opacity hover:opacity-100",
+                  "sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20",
+                )}
                 aria-label={t("sliderNext")}
                 onClick={goNext}
               >
@@ -291,7 +333,10 @@ export default function BackgroundSlider() {
             </div>
 
             <div
-              className="pointer-events-auto absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5 sm:bottom-3 sm:gap-2 md:bottom-4"
+              className={clsx(
+                "pointer-events-auto absolute bottom-2 left-1/2 flex",
+                "-translate-x-1/2 gap-1.5 sm:bottom-3 sm:gap-2 md:bottom-4",
+              )}
               role="tablist"
               aria-label="Slide indicators"
             >
@@ -300,11 +345,12 @@ export default function BackgroundSlider() {
                   key={slide.id}
                   type="button"
                   role="tab"
-                  className={`cursor-pointer rounded-full transition-colors ${
+                  className={clsx(
+                    "cursor-pointer rounded-full transition-colors",
                     i === selectedIndex
                       ? "h-2 w-4 border border-amber-400 bg-amber-400 shadow-sm sm:h-2.5 sm:w-5"
-                      : "h-2 w-2 border border-amber-400 bg-transparent hover:bg-[oklch(82.8%_0.189_84.429/0.3)] sm:h-2.5 sm:w-2.5"
-                  }`}
+                      : "h-2 w-2 border border-amber-400 bg-transparent hover:bg-[oklch(82.8%_0.189_84.429/0.3)] sm:h-2.5 sm:w-2.5",
+                  )}
                   aria-selected={i === selectedIndex}
                   aria-label={`Slide ${i + 1}`}
                   onClick={() => goToSlide(i)}

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
+import clsx from "clsx";
 
 export default function LanguageSwitcher() {
   const { language = "ka" } = useParams();
@@ -28,7 +29,10 @@ export default function LanguageSwitcher() {
   return (
     <button
       type="button"
-      className="m-0 inline-flex cursor-pointer items-center justify-center p-0 leading-none text-lg transition hover:opacity-80"
+      className={clsx(
+        "m-0 inline-flex cursor-pointer items-center justify-center p-0",
+        "text-lg leading-none transition hover:opacity-80",
+      )}
       onClick={() => setLanguage(nextLang)}
       aria-label={nextLabel}
       title={nextLabel}

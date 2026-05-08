@@ -31,9 +31,9 @@ body {
     color 0.2s ease;
 }
 
-#root {
+/* #root {
   min-height: 100vh;
-}
+} */
 
 html.dark body {
   background-color: #0f172a;

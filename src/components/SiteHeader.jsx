@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   MdClose,
@@ -10,6 +10,7 @@ import {
   MdVolumeOff,
   MdVolumeUp,
 } from "react-icons/md";
+import clsx from "clsx";
 import LanguageSwitcher from "./LanguageSwitcher";
 import useVoiceAssistant from "../hooks/useVoiceAssistant";
 import useUiPreferences from "../hooks/useUiPreferences";
@@ -19,6 +20,7 @@ import kaLogo from "../assets/images/ka-logo.png";
 export default function SiteHeader() {
   const { language = "ka" } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { isEnabled, setIsEnabled } = useVoiceAssistant(language);
   const { fontScale, increaseFontSize, theme, toggleTheme } =
@@ -30,6 +32,12 @@ export default function SiteHeader() {
     location.pathname === `/${language}` ||
     location.pathname === `/${language}/`;
   const activeHash = location.hash;
+  const navLinkBaseClasses =
+    "w-max border-b-2 pb-2 text-xs font-bold max-md:w-full md:text-xs xl:text-sm";
+  const navLinkActiveClasses =
+    "border-current text-blue-700 dark:text-blue-300";
+  const navLinkInactiveClasses =
+    "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300";
 
   useEffect(() => {
     if (!isMobileNavOpen) {
@@ -45,7 +53,6 @@ export default function SiteHeader() {
         setIsMobileNavOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handlePointerOutside);
     document.addEventListener("touchstart", handlePointerOutside);
 
@@ -55,10 +62,30 @@ export default function SiteHeader() {
     };
   }, [isMobileNavOpen]);
 
+  const handleLogoClick = () => {
+    navigate(`/${language}`);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
   return (
-    <header className="max-[1360px]:item mx-auto flex w-full max-w-[1800px] flex-col justify-between gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10 xl:px-15 2xl:px-20">
+    <header
+      className={clsx(
+        "max-[1360px]:item mx-auto flex w-full max-w-[1800px] flex-col justify-between",
+        "gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10",
+        "xl:px-15 2xl:px-20",
+      )}
+    >
       <div className="flex items-center justify-center gap-4">
-        <img src={logoSrc} alt={t("geoStatLogoAlt")} className={"max-h-11"} />
+        <button
+          type="button"
+          onClick={handleLogoClick}
+          className="cursor-pointer"
+          aria-label={t("home")}
+        >
+          <img src={logoSrc} alt={t("geoStatLogoAlt")} className="max-h-11" />
+        </button>
         <h1
           className={`max-w-xl min-w-[200px] text-sm leading-tight font-semibold uppercase sm:text-base ${
             theme === "dark" ? "text-slate-100" : "text-slate-900"
@@ -68,7 +95,14 @@ export default function SiteHeader() {
         </h1>
       </div>
 
-      <div className="flex w-full flex-row items-start justify-center gap-3 max-[1360px]:flex-col max-[1360px]:items-end max-md:flex-row max-md:items-center max-md:gap-5 min-[1360px]:gap-10 md:max-lg:items-center lg:w-auto lg:justify-end">
+      <div
+        className={clsx(
+          "flex w-full flex-row items-start justify-center gap-3",
+          "max-[1360px]:flex-col max-[1360px]:items-end max-md:flex-row",
+          "max-md:items-center max-md:gap-5 min-[1360px]:gap-10",
+          "md:max-lg:items-center lg:w-auto lg:justify-end",
+        )}
+      >
         <div ref={mobileNavContainerRef} className="relative flex">
           <button
             type="button"
@@ -83,38 +117,51 @@ export default function SiteHeader() {
             )}
           </button>
           <nav
-            className={`${isMobileNavOpen ? "max-md:flex" : "max-md:hidden"} max-md:absolute max-md:top-full max-md:left-full max-md:right-auto max-md:z-50 max-md:mt-2 max-md:ml-2 max-md:min-w-48 max-md:max-w-[calc(100vw-1rem)] max-md:flex-col max-md:gap-2 max-md:overflow-x-auto max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end max-md:dark:border-slate-700 max-md:dark:bg-slate-900 max-md:dark:text-slate-200`}
+            className={clsx(
+              isMobileNavOpen ? "max-md:flex" : "max-md:hidden",
+              "max-md:absolute max-md:top-full max-md:right-auto max-md:left-full",
+              "max-md:z-50 max-md:mt-2 max-md:ml-2 max-md:max-w-[calc(100vw-1rem)]",
+              "max-md:min-w-48 max-md:flex-col max-md:gap-2 max-md:overflow-x-auto",
+              "max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white",
+              "max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row",
+              "md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end",
+              "max-md:dark:border-slate-700 max-md:dark:bg-slate-900",
+              "max-md:dark:text-slate-200",
+            )}
           >
             <a
               href={`/${language}#main-statistics`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
+              className={clsx(
+                navLinkBaseClasses,
                 isHomeRoute && activeHash === "#main-statistics"
-                  ? "border-current text-blue-700 dark:text-blue-300"
-                  : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
-              }`}
+                  ? navLinkActiveClasses
+                  : navLinkInactiveClasses,
+              )}
             >
               {t("mainStatistics")}
             </a>
             <a
               href={`/${language}#legislation`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
+              className={clsx(
+                navLinkBaseClasses,
                 isHomeRoute && activeHash === "#legislation"
-                  ? "border-current text-blue-700 dark:text-blue-300 "
-                  : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
-              }`}
+                  ? navLinkActiveClasses
+                  : navLinkInactiveClasses,
+              )}
             >
               {t("legislation")}
             </a>
             <a
               href={`/${language}#links`}
               onClick={() => setIsMobileNavOpen(false)}
-              className={`w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
+              className={clsx(
+                navLinkBaseClasses,
                 isHomeRoute && activeHash === "#links"
-                  ? "border-current text-blue-700 dark:text-blue-300"
-                  : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
-              }`}
+                  ? navLinkActiveClasses
+                  : navLinkInactiveClasses,
+              )}
             >
               {t("links")}
             </a>
@@ -122,11 +169,10 @@ export default function SiteHeader() {
               to={`/${language}/glossary`}
               onClick={() => setIsMobileNavOpen(false)}
               className={({ isActive }) =>
-                `w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
-                  isActive
-                    ? "border-current text-blue-700 dark:text-blue-300"
-                    : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
-                }`
+                clsx(
+                  navLinkBaseClasses,
+                  isActive ? navLinkActiveClasses : navLinkInactiveClasses,
+                )
               }
             >
               {t("glossary")}
@@ -135,11 +181,10 @@ export default function SiteHeader() {
               to={`/${language}/infographic`}
               onClick={() => setIsMobileNavOpen(false)}
               className={({ isActive }) =>
-                `w-max max-md:w-full border-b-2 pb-2 text-xs font-bold md:text-xs xl:text-sm ${
-                  isActive
-                    ? "border-current text-blue-700 dark:text-blue-300"
-                    : "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300"
-                }`
+                clsx(
+                  navLinkBaseClasses,
+                  isActive ? navLinkActiveClasses : navLinkInactiveClasses,
+                )
               }
             >
               {t("infographic")}
