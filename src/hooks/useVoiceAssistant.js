@@ -64,20 +64,33 @@ function splitTextForTts(text, chunkSize = TTS_MAX_CHARS) {
   return chunks;
 }
 
-function extractReadableText(target) {
+function getReadableRoot(target) {
   const element = asElement(target);
 
   if (!element || element.closest('[data-no-tts="true"]')) {
+    return null;
+  }
+
+  if (element.getAttribute?.("data-tts")) {
+    return element;
+  }
+
+  if (!INTERACTIVE_TAGS.has(element.tagName)) {
+    return null;
+  }
+
+  return element;
+}
+
+function extractReadableText(target) {
+  const element = getReadableRoot(target);
+  if (!element) {
     return "";
   }
 
   const explicitText = element.getAttribute?.("data-tts");
   if (explicitText) {
     return explicitText.trim();
-  }
-
-  if (!INTERACTIVE_TAGS.has(element.tagName)) {
-    return "";
   }
 
   return (element.textContent || "").replace(/\s+/g, " ").trim();
@@ -90,6 +103,8 @@ export default function useVoiceAssistant(lang) {
   const audioRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const hoverTimeoutRef = useRef(null);
+  const pendingHoverRootRef = useRef(null);
+  const activeHoverRootRef = useRef(null);
 
   const getLanguageConfig = useCallback(() => {
     const normalizedLang = lang === "ka" || lang === "en" ? lang : "en";
@@ -113,6 +128,8 @@ export default function useVoiceAssistant(lang) {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
+    pendingHoverRootRef.current = null;
+    activeHoverRootRef.current = null;
   }, []);
 
   const playAudioUrl = useCallback(
@@ -213,7 +230,7 @@ export default function useVoiceAssistant(lang) {
   );
 
   const speak = useCallback(
-    (text) => {
+    (text, hoverRoot = null) => {
       const cleaned = text?.trim();
       if (!cleaned || !isEnabled) {
         return;
@@ -227,31 +244,59 @@ export default function useVoiceAssistant(lang) {
         return;
       }
 
+      stop();
+
       lastSpokenRef.current = cleaned;
       lastSpokenAtRef.current = now;
       const languageConfig = getLanguageConfig();
 
       const token = playbackTokenRef.current + 1;
       playbackTokenRef.current = token;
+      activeHoverRootRef.current = hoverRoot;
 
-      Promise.resolve().then(() =>
-        speakWithFallbacks(cleaned, languageConfig, token),
-      );
+      Promise.resolve().then(async () => {
+        try {
+          await speakWithFallbacks(cleaned, languageConfig, token);
+        } finally {
+          if (token === playbackTokenRef.current) {
+            activeHoverRootRef.current = null;
+          }
+        }
+      });
     },
-    [getLanguageConfig, isEnabled, speakWithFallbacks],
+    [getLanguageConfig, isEnabled, speakWithFallbacks, stop],
   );
 
   useEffect(() => {
     const onHover = (event) => {
+      const root = getReadableRoot(event.target);
       const text = extractReadableText(event.target);
-      if (text) {
+      if (text && root) {
         if (hoverTimeoutRef.current) {
           clearTimeout(hoverTimeoutRef.current);
         }
+        pendingHoverRootRef.current = root;
         hoverTimeoutRef.current = setTimeout(() => {
-          speak(text);
+          hoverTimeoutRef.current = null;
+          speak(text, root);
         }, HOVER_SPEAK_DELAY_MS);
       }
+    };
+
+    const onUnhover = (event) => {
+      if (!isEnabled) {
+        return;
+      }
+      const root =
+        pendingHoverRootRef.current || activeHoverRootRef.current;
+      if (!root) {
+        return;
+      }
+      const related = event.relatedTarget;
+      if (related instanceof Node && root.contains(related)) {
+        return;
+      }
+      stop();
     };
 
     const onClick = (event) => {
@@ -259,6 +304,7 @@ export default function useVoiceAssistant(lang) {
         clearTimeout(hoverTimeoutRef.current);
         hoverTimeoutRef.current = null;
       }
+      pendingHoverRootRef.current = null;
       const text = extractReadableText(event.target);
       if (text) {
         speak(text);
@@ -266,6 +312,7 @@ export default function useVoiceAssistant(lang) {
     };
 
     document.addEventListener("mouseover", onHover, true);
+    document.addEventListener("mouseout", onUnhover, true);
     document.addEventListener("click", onClick, true);
 
     return () => {
@@ -274,9 +321,10 @@ export default function useVoiceAssistant(lang) {
         hoverTimeoutRef.current = null;
       }
       document.removeEventListener("mouseover", onHover, true);
+      document.removeEventListener("mouseout", onUnhover, true);
       document.removeEventListener("click", onClick, true);
     };
-  }, [speak]);
+  }, [isEnabled, speak, stop]);
 
   useEffect(() => () => stop(), [stop]);
 

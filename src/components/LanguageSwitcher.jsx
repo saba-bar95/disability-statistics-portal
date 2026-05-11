@@ -31,7 +31,7 @@ export default function LanguageSwitcher() {
       type="button"
       className={clsx(
         "m-0 inline-flex cursor-pointer items-center justify-center p-0",
-        "text-lg leading-none transition hover:opacity-80",
+        "text-base leading-none transition hover:opacity-80",
       )}
       onClick={() => setLanguage(nextLang)}
       aria-label={nextLabel}

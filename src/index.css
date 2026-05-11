@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Match app theme (useUiPreferences toggles `dark` on <html>); v4 defaults dark: to prefers-color-scheme otherwise. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: "bpg-nino";
   src: url("./assets/fonts/bpg_nino_mtavruli.ttf");
@@ -8,6 +11,16 @@
 @font-face {
   font-family: "eng";
   src: url("./assets/fonts/OpenSans-Semibold.ttf");
+}
+
+@font-face {
+  font-family: "myFont";
+  src: url("./assets/fonts/bpg_mrgvlovani_0.ttf");
+}
+
+@font-face {
+  font-family: "myFontCaps";
+  src: url("./assets/fonts/bpg_mrgvlovani_caps.ttf");
 }
 
 :root {

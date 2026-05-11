@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   MdClose,
@@ -33,7 +39,7 @@ export default function SiteHeader() {
     location.pathname === `/${language}/`;
   const activeHash = location.hash;
   const navLinkBaseClasses =
-    "w-max border-b-2 pb-2 text-xs font-bold max-md:w-full md:text-xs xl:text-sm";
+    "w-max border-b-2 pb-2 text-[11px] font-bold max-md:w-full md:text-[11px] xl:text-xs";
   const navLinkActiveClasses =
     "border-current text-blue-700 dark:text-blue-300";
   const navLinkInactiveClasses =
@@ -87,7 +93,7 @@ export default function SiteHeader() {
           <img src={logoSrc} alt={t("geoStatLogoAlt")} className="max-h-11" />
         </button>
         <h1
-          className={`max-w-xl min-w-[200px] text-sm leading-tight font-semibold uppercase sm:text-base ${
+          className={`max-w-xl min-w-[200px] text-xs leading-tight font-semibold uppercase sm:text-sm ${
             theme === "dark" ? "text-slate-100" : "text-slate-900"
           }`}
         >
@@ -129,8 +135,8 @@ export default function SiteHeader() {
               "max-md:dark:text-slate-200",
             )}
           >
-            <a
-              href={`/${language}#main-statistics`}
+            <Link
+              to={`/${language}#main-statistics`}
               onClick={() => setIsMobileNavOpen(false)}
               className={clsx(
                 navLinkBaseClasses,
@@ -140,9 +146,9 @@ export default function SiteHeader() {
               )}
             >
               {t("mainStatistics")}
-            </a>
-            <a
-              href={`/${language}#legislation`}
+            </Link>
+            <Link
+              to={`/${language}#legislation`}
               onClick={() => setIsMobileNavOpen(false)}
               className={clsx(
                 navLinkBaseClasses,
@@ -152,9 +158,9 @@ export default function SiteHeader() {
               )}
             >
               {t("legislation")}
-            </a>
-            <a
-              href={`/${language}#links`}
+            </Link>
+            <Link
+              to={`/${language}#links`}
               onClick={() => setIsMobileNavOpen(false)}
               className={clsx(
                 navLinkBaseClasses,
@@ -164,7 +170,7 @@ export default function SiteHeader() {
               )}
             >
               {t("links")}
-            </a>
+            </Link>
             <NavLink
               to={`/${language}/glossary`}
               onClick={() => setIsMobileNavOpen(false)}

@@ -212,8 +212,8 @@ export default function BackgroundSlider() {
             <div className="pointer-events-auto flex w-[70%] max-w-full flex-col gap-8 sm:gap-14 md:gap-20">
               <p
                 className={clsx(
-                  "text-base leading-snug font-semibold text-balance drop-shadow-sm",
-                  "sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
+                  "text-sm leading-snug font-semibold text-balance drop-shadow-sm",
+                  "sm:text-base md:text-lg lg:text-xl xl:text-2xl",
                 )}
                 style={{ color: SLIDE_TEXT_COLORS[slide.id] ?? "#FFFFFF" }}
               >
@@ -225,11 +225,11 @@ export default function BackgroundSlider() {
                 rel="noopener noreferrer"
                 style={{ color: "#fff" }}
                 className={clsx(
-                  "inline-block w-max border border-white px-3 py-1.5 text-xs",
+                  "inline-block w-max border border-white px-3 py-1.5 text-[11px]",
                   "font-medium text-blue-200 uppercase underline",
                   "decoration-blue-200/80 underline-offset-2 transition",
                   "hover:text-white hover:decoration-white sm:px-4 sm:py-2",
-                  "sm:text-sm md:px-5 md:py-2.5 md:text-base lg:px-6 lg:py-3",
+                  "sm:text-xs md:px-5 md:py-2.5 md:text-sm lg:px-6 lg:py-3",
                 )}
               >
                 {t("sliderPdfLink")}
