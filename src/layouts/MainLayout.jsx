@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BackgroundSlider from "../components/BackgroundSlider";
 import SiteHeader from "../components/SiteHeader";
+import Footer from "../components/Footer";
 
 const SUPPORTED_LANGS = ["ka", "en"];
 
@@ -24,9 +25,10 @@ export default function MainLayout() {
     <div className="mx-auto min-h-screen w-full">
       <SiteHeader />
       <BackgroundSlider key={language} />
-      <main className="grid gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20">
+      <main className="mx-auto grid w-full max-w-[1800px] gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }
