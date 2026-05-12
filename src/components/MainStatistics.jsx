@@ -34,7 +34,7 @@ export default function MainStatistics() {
       <h1
         className={clsx(
           "text-center font-bold",
-          "text-sm sm:text-sm md:text-base lg:text-lg",
+          "text-base sm:text-base md:text-lg lg:text-xl",
         )}
       >
         {t("mainStatistics")}
@@ -52,7 +52,7 @@ export default function MainStatistics() {
               key={card.id}
               to={targetPath}
               className={clsx(
-                "flex min-h-36 w-full flex-col items-center justify-center gap-5 rounded-xl border border-transparent px-3 py-6 text-center outline-none sm:min-h-40 sm:gap-6 sm:px-4 sm:py-8 md:min-h-42 md:py-9 lg:min-h-44 lg:gap-7 lg:py-10",
+                "flex min-h-40 w-full flex-col items-center justify-center gap-5 rounded-xl border border-transparent px-3 py-6 text-center outline-none sm:min-h-44 sm:gap-6 sm:px-4 sm:py-8 md:min-h-48 md:py-9 lg:min-h-52 lg:gap-7 lg:py-10",
                 "bg-white shadow-[4px_4px_60px_#0000001a] dark:bg-slate-900 dark:shadow-[4px_4px_50px_rgba(255,255,255,0.12),0_0_1px_rgba(255,255,255,0.06)]",
                 "transition-[transform_1.8s_ease-in-out,border-color_650ms_ease-out,box-shadow_650ms_ease-out]",
                 "hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100",
@@ -62,21 +62,21 @@ export default function MainStatistics() {
               )}
             >
               <div
-                className="flex size-16 shrink-0 items-center justify-center rounded-full shadow-sm sm:size-18 md:size-20 lg:size-22"
+                className="flex size-18 shrink-0 items-center justify-center rounded-full shadow-sm sm:size-20 md:size-22 lg:size-24"
                 style={{ background: card.iconGradient }}
               >
                 <img
                   src={card.icon}
                   alt=""
-                  width={47}
-                  height={39}
-                  className="h-10 w-auto max-w-10 object-contain sm:h-11 sm:max-w-12 md:h-12 md:max-w-14 lg:h-14 lg:max-w-16"
+                  width={52}
+                  height={43}
+                  className="h-11 w-auto max-w-11 object-contain sm:h-12 sm:max-w-14 md:h-14 md:max-w-16 lg:h-16 lg:max-w-18"
                   aria-hidden
                 />
               </div>
               <p
                 className={clsx(
-                  "text-[11px] leading-snug font-bold uppercase transition-colors duration-900 ease-out sm:text-xs lg:text-sm",
+                  "text-xs leading-snug font-bold uppercase transition-colors duration-900 ease-out sm:text-sm lg:text-base",
                   isActive
                     ? "text-blue-700 dark:text-blue-300"
                     : "text-[#37496D] dark:text-slate-300",
