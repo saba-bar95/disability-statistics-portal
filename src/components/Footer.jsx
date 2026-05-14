@@ -22,7 +22,7 @@ const c = {
   socialBlock: "mt-3 text-center md:mt-2 md:text-left",
   socialLabel: "hidden text-[11px] md:block md:text-xs lg:text-sm",
   socialRow:
-    "flex items-center justify-center gap-3 pt-2 md:justify-start md:gap-4 lg:gap-6",
+    "flex items-center justify-center gap-3 pt-4 md:justify-start md:gap-4 md:pt-5 lg:gap-6 lg:pt-6",
   socialImg: "cursor-pointer transition-transform duration-300 hover:scale-130",
   menuList:
     "mt-1.5 flex list-none flex-col items-center gap-2.5 text-center md:mt-2 md:items-start md:gap-3 md:text-left",
@@ -109,7 +109,9 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className={c.divider} />
+      </div>
+      <div className={c.divider} />
+      <div className={c.innerShell}>
         <div className={c.bottom}>
           <p className={c.finePrint} style={georgianTextStyle}>
             {t("footerRights")}
