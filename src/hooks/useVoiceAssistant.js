@@ -105,6 +105,7 @@ export default function useVoiceAssistant(lang) {
   const hoverTimeoutRef = useRef(null);
   const pendingHoverRootRef = useRef(null);
   const activeHoverRootRef = useRef(null);
+  const committedHoverRootRef = useRef(null);
 
   const getLanguageConfig = useCallback(() => {
     const normalizedLang = lang === "ka" || lang === "en" ? lang : "en";
@@ -269,12 +270,26 @@ export default function useVoiceAssistant(lang) {
 
   useEffect(() => {
     const onHover = (event) => {
-      const root = getReadableRoot(event.target);
-      const text = extractReadableText(event.target);
+      const target = event.target;
+      const currentRoot =
+        committedHoverRootRef.current ||
+        pendingHoverRootRef.current ||
+        activeHoverRootRef.current;
+      if (
+        currentRoot &&
+        target instanceof Node &&
+        currentRoot.contains(target)
+      ) {
+        return;
+      }
+
+      const root = getReadableRoot(target);
+      const text = extractReadableText(target);
       if (text && root) {
         if (hoverTimeoutRef.current) {
           clearTimeout(hoverTimeoutRef.current);
         }
+        committedHoverRootRef.current = root;
         pendingHoverRootRef.current = root;
         hoverTimeoutRef.current = setTimeout(() => {
           hoverTimeoutRef.current = null;
@@ -288,7 +303,9 @@ export default function useVoiceAssistant(lang) {
         return;
       }
       const root =
-        pendingHoverRootRef.current || activeHoverRootRef.current;
+        committedHoverRootRef.current ||
+        pendingHoverRootRef.current ||
+        activeHoverRootRef.current;
       if (!root) {
         return;
       }
@@ -296,6 +313,7 @@ export default function useVoiceAssistant(lang) {
       if (related instanceof Node && root.contains(related)) {
         return;
       }
+      committedHoverRootRef.current = null;
       stop();
     };
 
