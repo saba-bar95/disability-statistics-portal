@@ -32,7 +32,9 @@ export default function SiteHeader() {
   const { fontScale, increaseFontSize, theme, toggleTheme } =
     useUiPreferences();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const mobileNavContainerRef = useRef(null);
+  const headerRef = useRef(null);
   const logoSrc = language === "ka" ? kaLogo : enLogo;
   const isHomeRoute =
     location.pathname === `/${language}` ||
@@ -44,6 +46,30 @@ export default function SiteHeader() {
     "border-current text-blue-700 dark:text-blue-300";
   const navLinkInactiveClasses =
     "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300";
+
+  useEffect(() => {
+    let lastScrollY =
+      typeof window !== "undefined" ? window.scrollY : 0;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const delta = currentY - lastScrollY;
+
+      if (currentY <= 0) {
+        setIsHidden(false);
+      } else if (delta > 4 && currentY > headerHeight) {
+        setIsHidden(true);
+        setIsMobileNavOpen(false);
+      } else if (delta < -4) {
+        setIsHidden(false);
+      }
+      lastScrollY = currentY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!isMobileNavOpen) {
@@ -77,12 +103,21 @@ export default function SiteHeader() {
 
   return (
     <header
+      ref={headerRef}
       className={clsx(
-        "max-[1360px]:item mx-auto flex w-full max-w-[1800px] flex-col justify-between",
-        "gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10",
-        "xl:px-15 2xl:px-20",
+        "sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm",
+        "transition-transform duration-300 ease-in-out",
+        "dark:bg-slate-900/95",
+        isHidden && "-translate-y-full",
       )}
     >
+      <div
+        className={clsx(
+          "max-[1360px]:item mx-auto flex w-full max-w-[1800px] flex-col justify-between",
+          "gap-5 px-5 py-4 lg:flex-row lg:items-center lg:gap-10 lg:px-10",
+          "xl:px-15 2xl:px-20",
+        )}
+      >
       <div className="flex items-center justify-center gap-4">
         <button
           type="button"
@@ -236,6 +271,7 @@ export default function SiteHeader() {
           </button>
           <LanguageSwitcher />
         </div>
+      </div>
       </div>
     </header>
   );
