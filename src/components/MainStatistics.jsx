@@ -28,7 +28,7 @@ export default function MainStatistics() {
     <section
       id="main-statistics"
       className={clsx(
-        "mt-[30px] flex flex-col gap-8 md:mt-[50px] xl:mt-[80px] xl:gap-10",
+        "mt-[30px] flex scroll-mt-28 flex-col gap-8 md:mt-[50px] xl:mt-[80px] xl:gap-10",
       )}
     >
       <h1
