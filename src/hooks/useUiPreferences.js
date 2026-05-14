@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const FONT_STEPS = [100, 110];
+const FONT_STEPS = [100, 110, 120];
 const FONT_STORAGE_KEY = "ui-font-scale";
 const THEME_STORAGE_KEY = "ui-theme";
 
