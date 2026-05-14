@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BackgroundSlider from "../components/BackgroundSlider";
+import LinkSlider from "../components/LinkSlider";
 import SiteHeader from "../components/SiteHeader";
 import Footer from "../components/Footer";
 
@@ -9,8 +10,13 @@ const SUPPORTED_LANGS = ["ka", "en"];
 
 export default function MainLayout() {
   const { language = "ka" } = useParams();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+
+  const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+  const isHome =
+    SUPPORTED_LANGS.includes(language) && normalizedPath === `/${language}`;
 
   useEffect(() => {
     if (!SUPPORTED_LANGS.includes(language)) {
@@ -28,6 +34,7 @@ export default function MainLayout() {
       <main className="mx-auto grid w-full max-w-[1800px] gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20">
         <Outlet />
       </main>
+      {isHome ? <LinkSlider /> : null}
       <Footer />
     </div>
   );
