@@ -6,6 +6,7 @@ export const API_BASE_URL =
 export async function fetchRecords(lang = "ka") {
   const params = new URLSearchParams({ lang });
   const url = `${API_BASE_URL}/records?${params.toString()}`;
+  console.log(url);
 
   const response = await fetch(url);
   if (!response.ok) {
