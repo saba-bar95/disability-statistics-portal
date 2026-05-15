@@ -37,7 +37,7 @@ const SECTION_CARDS_BASE = [
     id: "sport",
     titleKey: "sliderSportAbout",
     descriptionKey: "sportPageText",
-    to: "/sport",
+    to: "/sports",
     icon: sportSvg,
   },
 ];

@@ -22,7 +22,7 @@ const routes = [
     element: <HealthcarePage />,
   },
   {
-    path: "/:language/healthcare",
+    path: "/:language/sports",
     element: <SportPage />,
   },
   {
