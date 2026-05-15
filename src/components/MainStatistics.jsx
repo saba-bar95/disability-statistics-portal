@@ -28,7 +28,8 @@ export default function MainStatistics() {
     <section
       id="main-statistics"
       className={clsx(
-        "mt-[30px] flex scroll-mt-28 flex-col gap-8 md:mt-[50px] xl:mt-[80px] xl:gap-10",
+        "flex scroll-mt-28 flex-col gap-8 xl:gap-10",
+        "mt-[30px] md:mt-[50px] xl:mt-[80px]",
       )}
     >
       <h1
@@ -41,7 +42,10 @@ export default function MainStatistics() {
       </h1>
       <nav
         aria-label={t("mainStatistics")}
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:gap-8 xl:grid-cols-4 xl:gap-[30px]"
+        className={clsx(
+          "grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:gap-8 xl:grid-cols-4",
+          "xl:gap-[30px]",
+        )}
       >
         {SECTION_CARDS.map((card) => {
           const targetPath = `/${language}${card.to}`;
@@ -52,7 +56,8 @@ export default function MainStatistics() {
               key={card.id}
               to={targetPath}
               className={clsx(
-                "flex min-h-40 w-full flex-col items-center justify-center gap-5 rounded-xl border border-transparent px-3 py-6 text-center outline-none sm:min-h-44 sm:gap-6 sm:px-4 sm:py-8 md:min-h-48 md:py-9 lg:min-h-52 lg:gap-7 lg:py-10",
+                "flex w-full flex-col items-center justify-center rounded-xl border border-transparent text-center outline-none",
+                "min-h-40 gap-5 px-3 py-6 sm:min-h-44 sm:gap-6 sm:px-4 sm:py-8 md:min-h-48 md:py-9 lg:min-h-52 lg:gap-7 lg:py-10",
                 "bg-white shadow-[4px_4px_60px_#0000001a] dark:bg-slate-900 dark:shadow-[4px_4px_50px_rgba(255,255,255,0.12),0_0_1px_rgba(255,255,255,0.06)]",
                 "transition-[transform_1.8s_ease-in-out,border-color_650ms_ease-out,box-shadow_650ms_ease-out]",
                 "hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100",
@@ -62,7 +67,10 @@ export default function MainStatistics() {
               )}
             >
               <div
-                className="flex size-18 shrink-0 items-center justify-center rounded-full shadow-sm sm:size-20 md:size-22 lg:size-24"
+                className={clsx(
+                  "flex shrink-0 items-center justify-center rounded-full shadow-sm",
+                  "size-18 sm:size-20 md:size-22 lg:size-24",
+                )}
                 style={{ background: card.iconGradient }}
               >
                 <img
@@ -70,13 +78,17 @@ export default function MainStatistics() {
                   alt=""
                   width={52}
                   height={43}
-                  className="h-11 w-auto max-w-11 object-contain sm:h-12 sm:max-w-14 md:h-14 md:max-w-16 lg:h-16 lg:max-w-18"
+                  className={clsx(
+                    "w-auto object-contain",
+                    "h-11 max-w-11 sm:h-12 sm:max-w-14 md:h-14 md:max-w-16 lg:h-16 lg:max-w-18",
+                  )}
                   aria-hidden
                 />
               </div>
               <p
                 className={clsx(
-                  "text-xs leading-snug font-bold uppercase transition-colors duration-900 ease-out sm:text-sm lg:text-base",
+                  "leading-snug font-bold uppercase transition-colors duration-900 ease-out",
+                  "text-xs sm:text-sm lg:text-base",
                   isActive
                     ? "text-blue-700 dark:text-blue-300"
                     : "text-[#37496D] dark:text-slate-300",
