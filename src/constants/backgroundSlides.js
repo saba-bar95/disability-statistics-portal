@@ -32,6 +32,12 @@ export const SLIDE_TEXT_COLORS = {
   sport: "#CD41FA",
 };
 
+export function getSlidePdfUrl(slideId, language = "ka") {
+  const langKey = language === "en" ? "en" : "ka";
+  const pdfs = SLIDE_PDF_URLS[langKey] ?? SLIDE_PDF_URLS.ka;
+  return pdfs[slideId] ?? DEFAULT_SLIDE_PDF;
+}
+
 export function slidesForLanguage(language) {
   const isEn = language === "en";
   const langKey = isEn ? "en" : "ka";
