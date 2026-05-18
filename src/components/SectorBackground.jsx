@@ -57,7 +57,7 @@ export default function SectorBackground({ slideId }) {
         >
           <div
             className={clsx(
-              "absolute inset-y-0 left-0 flex w-1/2 flex-col items-center justify-center",
+              "absolute inset-y-0 left-0 flex w-4/5 flex-col items-center justify-center md:w-1/2",
               "translate-x-4 px-3 sm:translate-x-6 sm:px-5",
               "md:translate-x-8 md:px-8 lg:translate-x-10 lg:px-10",
             )}

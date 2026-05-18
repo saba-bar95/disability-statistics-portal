@@ -75,7 +75,7 @@ function ChevronIcon({ direction = "left" }) {
 }
 
 const scrollerClass = clsx(
-  "flex min-h-0 cursor-grab select-none flex-nowrap items-center overflow-x-auto py-1 active:cursor-grabbing",
+  "justify-center flex min-h-0 cursor-grab select-none flex-nowrap items-center overflow-x-auto py-1 active:cursor-grabbing",
   "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
 );
 

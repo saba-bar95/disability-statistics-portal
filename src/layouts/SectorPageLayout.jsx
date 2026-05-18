@@ -57,7 +57,7 @@ export default function SectorPageLayout({ sector, children }) {
         <SiteHeader />
         <SectorBackground slideId={config.slideId} />
         <main className="mx-auto grid w-full max-w-[1800px] gap-10 px-5 lg:px-10 xl:px-15 2xl:px-20">
-          <div className="relative z-10 mt-[-80px]">
+          <div className="relative z-10 mt-[-30px] md:mt-[-80px]">
             <SectorMainStatistics />
           </div>
           <section
