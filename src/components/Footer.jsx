@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import facebook from "../assets/images/footer/facebook.svg";
 import twitter from "../assets/images/footer/twitter.svg";
@@ -59,9 +59,21 @@ const FOOTER_NAV = [
 
 export default function Footer() {
   const { language = "ka" } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const georgianTextStyle =
     language === "ka" ? { fontFamily: "myFont, var(--app-font)" } : undefined;
+
+  const handleFooterNavClick = (event, path) => {
+    if (!path.startsWith("/")) {
+      return;
+    }
+    event.preventDefault();
+    navigate(`/${language}${path}`);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
 
   return (
     <footer className={c.footer}>
@@ -91,7 +103,12 @@ export default function Footer() {
             <ul className={c.menuList} style={georgianTextStyle}>
               {FOOTER_NAV.map(({ path, i18nKey }) => (
                 <li key={path} className={c.navLi}>
-                  <Link to={`/${language}${path}`}>{t(i18nKey)}</Link>
+                  <Link
+                    to={`/${language}${path}`}
+                    onClick={(event) => handleFooterNavClick(event, path)}
+                  >
+                    {t(i18nKey)}
+                  </Link>
                 </li>
               ))}
             </ul>
