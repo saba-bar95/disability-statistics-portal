@@ -41,7 +41,7 @@ export default function SiteHeader() {
     location.pathname === `/${language}/`;
   const activeHash = location.hash;
   const navLinkBaseClasses =
-    "w-max border-b-2 pb-2 text-[11px] font-bold max-md:w-full md:text-[11px] xl:text-xs";
+    "w-max border-b-2 pb-2 text-xs font-bold max-md:w-full md:text-xs xl:text-sm";
   const navLinkActiveClasses =
     "border-current text-blue-700 dark:text-blue-300";
   const navLinkInactiveClasses =
@@ -128,7 +128,7 @@ export default function SiteHeader() {
           <img src={logoSrc} alt={t("geoStatLogoAlt")} className="max-h-11" />
         </button>
         <h1
-          className={`max-w-xl min-w-[200px] text-xs leading-tight font-semibold uppercase sm:text-sm ${
+          className={`max-w-xl min-w-[200px] text-sm leading-tight font-semibold uppercase sm:text-base ${
             theme === "dark" ? "text-slate-100" : "text-slate-900"
           }`}
         >
