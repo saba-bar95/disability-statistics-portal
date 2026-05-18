@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -15,9 +16,28 @@ export default function SectorMainStatistics() {
   const { t } = useTranslation();
   const { language = "ka" } = useParams();
   const { pathname } = useLocation();
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+
+    if (!el) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [pathname]);
 
   return (
-    <section id="main-statistics" className="flex scroll-mt-28 flex-col gap-0">
+    <section
+      ref={sectionRef}
+      id="main-statistics"
+      className="flex scroll-mt-28 flex-col gap-0"
+    >
       <nav
         aria-label={t("mainStatistics")}
         className="mx-auto flex w-auto flex-col gap-1.5 rounded-t-[30px] bg-[#f8fafc] p-2 sm:gap-2 sm:p-3 md:grid md:grid-cols-4 md:gap-2.5 md:p-3.5 xl:gap-2.5 xl:p-4 dark:bg-slate-900"
