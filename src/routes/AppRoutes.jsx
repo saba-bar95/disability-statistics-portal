@@ -30,20 +30,20 @@ const routes = [
     element: <SocialSecurityPage />,
   },
   {
-    path: "/:language/glossary",
-    element: <GlossaryPage />,
-  },
-  {
-    path: "/:language/infographic",
-    element: <InfographicPage />,
-  },
-  {
     path: "/:language",
     element: <MainLayout />,
     children: [
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "glossary",
+        element: <GlossaryPage />,
+      },
+      {
+        path: "infographic",
+        element: <InfographicPage />,
       },
     ],
   },
