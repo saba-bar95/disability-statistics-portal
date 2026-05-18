@@ -21,6 +21,10 @@ export default function MainLayout() {
   const isInfographic =
     SUPPORTED_LANGS.includes(language) &&
     normalizedPath === `/${language}/infographic`;
+  const isGlossary =
+    SUPPORTED_LANGS.includes(language) &&
+    normalizedPath === `/${language}/glossary`;
+  const isFullBleedPage = isInfographic || isGlossary;
 
   useEffect(() => {
     if (!SUPPORTED_LANGS.includes(language)) {
@@ -38,10 +42,10 @@ export default function MainLayout() {
       <main
         className={clsx(
           "w-full",
-          isInfographic
+          isFullBleedPage
             ? "max-w-none px-0"
             : "mx-auto max-w-[1800px] grid gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20",
-          !isHome && !isInfographic && "py-6 md:py-8",
+          !isHome && !isFullBleedPage && "py-6 md:py-8",
         )}
       >
         <Outlet />

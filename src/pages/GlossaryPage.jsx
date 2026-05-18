@@ -1,16 +1,29 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
+import glossaryMainBackground from "../assets/images/glossary/main-background.svg";
+import glossarySecondaryBackground from "../assets/images/glossary/secondary-background.svg";
 
 export default function GlossaryPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <h2 className="mb-2 text-lg font-semibold text-slate-800 dark:text-slate-100">
-        {t("glossary")}
-      </h2>
-      <p className="text-sm text-slate-700 dark:text-slate-300">
-        {t("glossaryText")}
-      </p>
+    <section
+      aria-label={t("glossary")}
+      className="w-full min-[3000px]:bg-[#EAEFF8] dark:min-[3000px]:bg-slate-800"
+    >
+      <div className="relative w-full min-[3000px]:h-[669px]">
+        <img
+          src={glossaryMainBackground}
+          alt=""
+          className="block h-auto w-full min-[3000px]:h-full min-[3000px]:object-cover min-[3000px]:object-bottom"
+          aria-hidden
+        />
+        <img
+          src={glossarySecondaryBackground}
+          alt=""
+          className="absolute top-0 left-1/2 h-auto w-[28.02%] min-[3000px]:h-full min-[3000px]:object-contain min-[3000px]:object-top"
+          aria-hidden
+        />
+      </div>
     </section>
-  )
+  );
 }
