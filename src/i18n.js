@@ -37,6 +37,12 @@ const resources = {
         "სასარგებლო ბმულების სიაში შეგროვებულია ოფიციალური რესურსები, პარტნიორი ორგანიზაციები და დამატებითი ინფორმაცია.",
       glossaryText:
         "გლოსარიუმის გვერდი განმარტავს პორტალზე გამოყენებულ ძირითად ტერმინებსა და განმარტებებს.",
+      glossaryAlphabetNav: "გლოსარიუმის ანბანი",
+      glossaryLoadError: "გლოსარიუმის ჩატვირთვა ვერ მოხერხდა",
+      glossaryLetterEmpty: "გლოსარიუმი არ არის ასოზე «{{letter}}»",
+      glossaryFilterByLetter: "გლოსარიუმი ასოზე «{{letter}}»",
+      glossaryNoEntries: "გლოსარიუმის ჩანაწერები ვერ მოიძებნა",
+      glossaryRefresh: "განახლება",
       infographicText:
         "ინფოგრაფიკის გვერდზე განთავსდება ვიზუალური მასალები, რომლებიც მონაცემებს მარტივად აღსაქმელს ხდის.",
       educationPageText:
@@ -123,6 +129,12 @@ const resources = {
         "This section provides useful links to official sources, partner organizations, and additional resources.",
       glossaryText:
         "The glossary page explains key terms and definitions used throughout the portal.",
+      glossaryAlphabetNav: "Glossary alphabet",
+      glossaryLoadError: "Could not load glossary",
+      glossaryLetterEmpty: "No glossary entries for “{{letter}}”",
+      glossaryFilterByLetter: "Glossary entries for “{{letter}}”",
+      glossaryNoEntries: "No glossary entries found",
+      glossaryRefresh: "Refresh",
       infographicText:
         "The infographic page presents visual summaries to make statistical insights easier to understand.",
       educationPageText:
