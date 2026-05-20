@@ -56,20 +56,18 @@ export default function SectorPageLayout({ sector, children }) {
       <div className="mx-auto min-h-screen w-full">
         <SiteHeader />
         <SectorBackground slideId={config.slideId} />
-        <main className="mx-auto grid w-full max-w-[1800px] gap-10 px-5 lg:px-10 xl:px-15 2xl:px-20">
-          <div className="relative z-10 mt-[-30px] md:mt-[-80px]">
-            <SectorMainStatistics />
+        <main className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 lg:px-10 xl:px-15 2xl:px-20">
+          <div className="mx-auto flex w-fit max-w-full flex-col">
+            <div className="relative z-10 mt-[-30px] md:mt-[-80px]">
+              <SectorMainStatistics />
+            </div>
+            <section
+              className={clsx("w-full rounded-2xl p-4", "md:p-4 lg:p-5")}
+            >
+              {children}
+              <SectorRecordsList sector={sector} />
+            </section>
           </div>
-          <section
-            className={clsx(
-              "rounded-2xl border border-blue-200 bg-white p-4 shadow-sm",
-              "dark:border-blue-700 dark:bg-slate-900",
-              "md:p-4 lg:p-5",
-            )}
-          >
-            {children}
-            <SectorRecordsList />
-          </section>
         </main>
         <Footer />
       </div>

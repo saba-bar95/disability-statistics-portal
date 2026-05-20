@@ -36,11 +36,11 @@ export default function SectorMainStatistics() {
     <section
       ref={sectionRef}
       id="main-statistics"
-      className="flex scroll-mt-28 flex-col gap-0"
+      className="flex w-full scroll-mt-28 flex-col gap-0"
     >
       <nav
         aria-label={t("mainStatistics")}
-        className="mx-auto flex w-auto flex-col gap-1.5 rounded-t-[30px] bg-[#f8fafc] p-2 sm:gap-2 sm:p-3 md:grid md:grid-cols-4 md:gap-2.5 md:p-3.5 xl:gap-2.5 xl:p-4 dark:bg-slate-900"
+        className="flex w-full flex-col gap-1.5 rounded-t-[30px] bg-[#f8fafc] p-2 sm:gap-2 sm:p-3 md:grid md:grid-cols-4 md:gap-2.5 md:p-3.5 xl:gap-2.5 xl:p-4 dark:bg-slate-900"
       >
         {SECTION_CARDS.map((card) => {
           const targetPath = `/${language}${card.to}`;
@@ -66,7 +66,7 @@ export default function SectorMainStatistics() {
             >
               <p
                 className={clsx(
-                  "text-[11px] leading-snug font-bold uppercase transition-colors duration-900 ease-out sm:text-xs md:text-sm",
+                  "text-xs leading-snug font-bold uppercase transition-colors duration-900 ease-out sm:text-sm md:text-base",
                   isActive
                     ? "text-white"
                     : "text-[#37496D] dark:text-slate-300",
