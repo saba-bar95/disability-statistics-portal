@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   fetchRecordsByCategory,
   fetchRecordsByCategoryAndSubCategory,
@@ -14,33 +14,21 @@ export default function useSectorRecords(categoryId, language = "ka") {
   const hasCategory = categoryId != null;
   const currentScopeKey = scopeKey(categoryId, language);
 
-  const [records, setRecords] = useState([]);
+  const [cacheBySubCategory, setCacheBySubCategory] = useState({});
   const [availableSubCategoryIds, setAvailableSubCategoryIds] = useState([]);
   const [selectedSubCategoryIds, setSelectedSubCategoryIds] = useState([]);
   const [isDiscoveringSubCategories, setIsDiscoveringSubCategories] =
     useState(hasCategory);
-  const [isFetchingRecords, setIsFetchingRecords] = useState(false);
   const [error, setError] = useState(null);
 
   const [prevScopeKey, setPrevScopeKey] = useState(currentScopeKey);
   if (currentScopeKey !== prevScopeKey) {
     setPrevScopeKey(currentScopeKey);
-    setRecords([]);
+    setCacheBySubCategory({});
     setAvailableSubCategoryIds([]);
     setSelectedSubCategoryIds([]);
     setError(null);
     setIsDiscoveringSubCategories(hasCategory);
-    setIsFetchingRecords(false);
-  }
-
-  const selectedKey = selectedSubCategoryIds.join(",");
-  const [prevSelectedKey, setPrevSelectedKey] = useState(selectedKey);
-  if (selectedKey !== prevSelectedKey) {
-    setPrevSelectedKey(selectedKey);
-    if (hasCategory && selectedSubCategoryIds.length > 0) {
-      setIsFetchingRecords(true);
-      setError(null);
-    }
   }
 
   // Discover subcategories for this sector (all selected by default).
@@ -82,49 +70,76 @@ export default function useSectorRecords(categoryId, language = "ka") {
     };
   }, [categoryId, language, hasCategory]);
 
-  // Fetch records for each selected subcategory: /records/{category}/{subcategory}.
+  // Fetch only subcategories that are selected but not yet cached.
   useEffect(() => {
     if (!hasCategory || selectedSubCategoryIds.length === 0) {
+      return;
+    }
+
+    const missingIds = selectedSubCategoryIds.filter(
+      (id) => cacheBySubCategory[id] == null,
+    );
+    if (missingIds.length === 0) {
       return;
     }
 
     let isMounted = true;
 
     Promise.all(
-      selectedSubCategoryIds.map((subCategoryId) =>
+      missingIds.map((subCategoryId) =>
         fetchRecordsByCategoryAndSubCategory(
           categoryId,
           subCategoryId,
           language,
-        ),
+        ).then((data) => ({ subCategoryId, data })),
       ),
     )
-      .then((groups) => {
+      .then((results) => {
         if (!isMounted) {
           return;
         }
-        setRecords(mergeRecordsById(groups));
+        setCacheBySubCategory((prev) => {
+          const next = { ...prev };
+          for (const { subCategoryId, data } of results) {
+            next[subCategoryId] = data;
+          }
+          return next;
+        });
       })
       .catch((err) => {
         if (!isMounted) {
           return;
         }
-        setRecords([]);
         setError(err);
         if (import.meta.env.DEV) {
           console.error("[recordsApi] sector fetch failed:", err);
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsFetchingRecords(false);
         }
       });
 
     return () => {
       isMounted = false;
     };
-  }, [categoryId, language, selectedSubCategoryIds, hasCategory]);
+  }, [categoryId, language, hasCategory, selectedSubCategoryIds, cacheBySubCategory]);
+
+  const records = useMemo(() => {
+    if (!hasCategory || selectedSubCategoryIds.length === 0) {
+      return [];
+    }
+    const groups = selectedSubCategoryIds
+      .map((id) => cacheBySubCategory[id])
+      .filter((group) => Array.isArray(group));
+    if (groups.length === 0) {
+      return [];
+    }
+    return mergeRecordsById(groups);
+  }, [hasCategory, selectedSubCategoryIds, cacheBySubCategory]);
+
+  const isFetchingRecords = useMemo(() => {
+    if (!hasCategory || selectedSubCategoryIds.length === 0) {
+      return false;
+    }
+    return selectedSubCategoryIds.some((id) => cacheBySubCategory[id] == null);
+  }, [hasCategory, selectedSubCategoryIds, cacheBySubCategory]);
 
   const toggleSubCategory = useCallback((subCategoryId) => {
     setSelectedSubCategoryIds((current) =>
@@ -139,18 +154,21 @@ export default function useSectorRecords(categoryId, language = "ka") {
     [selectedSubCategoryIds],
   );
 
-  const isLoading = isDiscoveringSubCategories || isFetchingRecords;
-  const visibleRecords =
-    !hasCategory || selectedSubCategoryIds.length === 0 ? [] : records;
+  const isLoading =
+    isDiscoveringSubCategories ||
+    (selectedSubCategoryIds.length > 0 &&
+      records.length === 0 &&
+      isFetchingRecords);
 
   return {
-    records: visibleRecords,
+    records,
     availableSubCategoryIds,
     selectedSubCategoryIds,
     setSelectedSubCategoryIds,
     toggleSubCategory,
     isSubCategorySelected,
     isLoading,
+    isFetchingRecords,
     error,
     categoryId,
   };
