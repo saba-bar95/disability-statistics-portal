@@ -65,6 +65,51 @@ const resources = {
       sliderHealthAbout: "ჯანმრთელობის დაცვა",
       sliderSocAbout: "სოციალური უზრუნველყოფა, კეთილდღეობა, უსაფრთხოება",
       sliderSportAbout: "სპორტი",
+      sectorRecordsTitleHealthcare: "ჯანმრთელობის დაცვის სტატისტიკა",
+      sectorRecordsTitleEducation: "განათლების სტატისტიკა",
+      sectorRecordsTitleSport: "სპორტის სტატისტიკა",
+      sectorRecordsTitleSocialSecurity:
+        "სოციალური უზრუნველყოფა, კეთილდღეობა, უსაფრთხოება",
+      sectorSubcat_fallback: "ქვეკატეგორია {{id}}",
+      sectorSubcat_healthcare_1:
+        "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
+      sectorSubcat_healthcare_2:
+        "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
+      sectorSubcat_healthcare_3:
+        "მრავალინდიკატორული კლასტერული კვლევა (MICS) 2018",
+      sectorSubcat_education_1:
+        "განათლების, მეცნიერებისა და ახალგაზრდობის სამინისტრო",
+      sectorSubcat_education_2:
+        "მრავალინდიკატორული კლასტერული კვლევა (MICS) 2018",
+      sectorSubcat_education_3:
+        "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
+      sectorSubcat_social_security_1:
+        "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
+      sectorSubcat_social_security_2:
+        "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
+      sectorSubcat_social_security_3:
+        "მრავალინდიკატორული კლასტერული კვლევა (MICS) 2018",
+      sectorSubcat_sport_1:
+        "საქართველოს კულტურისა და სპორტის სამინისტრო",
+      sectorSubcatFilterGroup: "ფილტრი წყაროთი მონაცემებით",
+      sectorRecordDownload: "ფაილის ჩამოტვირთვა",
+      sectorRecordToggleChart: "გრაფიკის ჩვენება",
+      sectorRecordToggleChartHide: "გრაფიკის დამალვა",
+      sectorRecordChartType: "დიაგრამის ტიპი",
+      sectorRecordChartBar: "სვეტოვანი დიაგრამა",
+      sectorRecordChartLine: "შეხაზებითი დიაგრამა",
+      chartUnit_persons: "ერთეული",
+      chartUnit_thousandGel: "ათასი ლარი",
+      healthcareChartTitle_4:
+        "შშმ პირების რიცხოვნობა, რომელთაც ჯანმრთელობის დაცვის სახელმწიფო პროგრამის ფარგლებში გაიტანეს მედიკამენტი,\nსქესის მიხედვით",
+      healthcareChartTitle_5:
+        "ჯანმრთელობის დაცვის სახელმწიფო პროგრამის ფარგლებში შშმ პირებზე გაცემული მედიკამენტების ღირებულება\nსქესის მიხედვით,",
+      healthcareChartTitle_6:
+        "ფსიქიკური ჯანმრთელობის დაცვის სახელმწიფო პროგრამით შშმ პირებისთვის დაფინანსებული შემთხვევების/მომსახურებების რაოდენობა, სქესის მიხედვით",
+      healthcareChartTitle_7:
+        "ჯანმრთელობის დაცვის სახელმწიფო პროგრამებით შშმ პირებისთვის დაფინანსებული შემთხვევების/მომსახურების რაოდენობა\nსქესის მიხედვით",
+      healthcareChartTitle_8:
+        "ჯანმრთელობის დაცვის სახელმწიფო პროგრამების ფარგლებში დაფინანსებული შშმ პირების რიცხოვნობა\nსქესის მიხედვით",
       sliderPdfLink: "ინფოგრაფიკა",
       closePdfModal: "დახურვა",
       sliderPrev: "წინა სლაიდი",
@@ -157,6 +202,44 @@ const resources = {
       sliderHealthAbout: "HEALTHCARE",
       sliderSocAbout: "SOCIAL SECURITY, WELL-BEING AND SAFETY",
       sliderSportAbout: "SPORT",
+      sectorRecordsTitleHealthcare: "Healthcare Statistics",
+      sectorRecordsTitleEducation: "Education Statistics",
+      sectorRecordsTitleSport: "Sport statistics",
+      sectorRecordsTitleSocialSecurity:
+        "SOCIAL SECURITY, WELL-BEING AND SAFETY",
+      sectorSubcat_fallback: "Subcategory {{id}}",
+      sectorSubcat_healthcare_1:
+        "Ministry of Internally Displaced Persons from The Occupied Territories, Labour, Health and Social Affairs of Georgia",
+      sectorSubcat_healthcare_2: "2014 GENERAL POPULATION CENSUS",
+      sectorSubcat_healthcare_3: "Multiple Indicator Cluster Survey (MICS) 2018",
+      sectorSubcat_education_1: "Ministry of Education and Science of Georgia",
+      sectorSubcat_education_2: "Multiple Indicator Cluster Survey (MICS) 2018",
+      sectorSubcat_education_3:
+        "Ministry of Internally Displaced Persons from The Occupied Territories, Labour, Health and Social Affairs of Georgia",
+      sectorSubcat_social_security_1:
+        "Ministry of Internally Displaced Persons from The Occupied Territories, Labour, Health and Social Affairs of Georgia",
+      sectorSubcat_social_security_2: "2014 GENERAL POPULATION CENSUS",
+      sectorSubcat_social_security_3: "Multiple Indicator Cluster Survey (MICS) 2018",
+      sectorSubcat_sport_1: "Ministry of Culture, Sport and Youth of Georgia",
+      sectorSubcatFilterGroup: "Filter by data source",
+      sectorRecordDownload: "Download file",
+      sectorRecordToggleChart: "Show chart",
+      sectorRecordToggleChartHide: "Hide chart",
+      sectorRecordChartType: "Chart type",
+      sectorRecordChartBar: "Bar chart",
+      sectorRecordChartLine: "Line chart",
+      chartUnit_persons: "persons",
+      chartUnit_thousandGel: "thousand GEL",
+      healthcareChartTitle_4:
+        "The number of persons with disabilities who benefited medication within the framework of the state health care program\nby sex",
+      healthcareChartTitle_5:
+        "The cost of medicines given to disabled people within the framework of the state health care program\nby sex",
+      healthcareChartTitle_6:
+        "Number of cases/services funded by mental health care state program for persons with disabilities\nby sex",
+      healthcareChartTitle_7:
+        "Number of cases/services funded by state health care programs for persons with disabilities\nby sex",
+      healthcareChartTitle_8:
+        "The number of persons with disabilities financed within the framework of state health care programs\nby sex",
       sliderPdfLink: "Infographic",
       closePdfModal: "Close",
       sliderPrev: "Previous slide",
