@@ -9,17 +9,17 @@ This document describes how the **Disability Statistics Portal** is built so you
 
 ## 1. What kind of app this is
 
-| Aspect | Choice |
-|--------|--------|
-| Type | Client-side **SPA** (no Next.js / no SSR) |
-| UI | **React 19** + **React DOM** |
-| Build | **Vite 8** |
-| Routing | **React Router v7** (`useRoutes` + route config object) |
-| Styling | **Tailwind CSS v4** via `@tailwindcss/vite` |
-| Data | REST **fetch** to Geostat disability API |
-| i18n | **i18next** + **react-i18next**, URL prefix `/ka` \| `/en` |
-| Charts | **Recharts** in a **lazy-loaded** chunk |
-| Deploy | **Vercel** static `dist/` + SPA fallback |
+| Aspect  | Choice                                                     |
+| ------- | ---------------------------------------------------------- |
+| Type    | Client-side **SPA** (no Next.js / no SSR)                  |
+| UI      | **React 19** + **React DOM**                               |
+| Build   | **Vite 8**                                                 |
+| Routing | **React Router v7** (`useRoutes` + route config object)    |
+| Styling | **Tailwind CSS v4** via `@tailwindcss/vite`                |
+| Data    | REST **fetch** to Geostat disability API                   |
+| i18n    | **i18next** + **react-i18next**, URL prefix `/ka` \| `/en` |
+| Charts  | **Recharts** in a **lazy-loaded** chunk                    |
+| Deploy  | **Vercel** static `dist/` + SPA fallback                   |
 
 ---
 
@@ -106,13 +106,13 @@ src/
 
 ### 4.1 URL model
 
-| Pattern | Example | Component |
-|---------|---------|-----------|
-| Redirect | `/` → `/ka` | `Navigate` |
-| Sector | `/ka/education`, `/en/healthcare` | `SectorPage` → `SectorPageLayout` |
-| Home | `/ka`, `/en` | `MainLayout` → `HomePage` |
-| Glossary | `/ka/glossary` | `GlossaryPage` |
-| Infographic | `/ka/infographic` | `InfographicPage` |
+| Pattern     | Example                           | Component                         |
+| ----------- | --------------------------------- | --------------------------------- |
+| Redirect    | `/` → `/ka`                       | `Navigate`                        |
+| Sector      | `/ka/education`, `/en/healthcare` | `SectorPage` → `SectorPageLayout` |
+| Home        | `/ka`, `/en`                      | `MainLayout` → `HomePage`         |
+| Glossary    | `/ka/glossary`                    | `GlossaryPage`                    |
+| Infographic | `/ka/infographic`                 | `InfographicPage`                 |
 
 **Language** is always the first segment: `ka` or `en`.  
 `document.documentElement` gets `data-lang` and `lang` from layout effects + `usePortalDocumentTitle`.
@@ -131,9 +131,9 @@ keeps **`SectorPageLayout` mounted** when switching SECTION_CARDS. The layout do
 
 **Route order in `AppRoutes.jsx`:**
 
-1. `/` redirect  
-2. `/:language/:sectorPath` (sector)  
-3. `/:language` + children (home, glossary, infographic)  
+1. `/` redirect
+2. `/:language/:sectorPath` (sector)
+3. `/:language` + children (home, glossary, infographic)
 4. `*` → `/ka`
 
 Sector route **must** be registered **before** `/:language` so `glossary` is not captured as `sectorPath`.
@@ -159,12 +159,12 @@ Used inside `SectorRecordsList` with `<Suspense fallback={<ChartLoadingFallback 
 
 ### 4.4 Scroll behavior (`ScrollToTop.jsx`)
 
-| Navigation | Scroll |
-|------------|--------|
-| Sector → sector | **No scroll** (preserve position) |
-| Language only (`/ka/x` ↔ `/en/x`, same path) | **No scroll** |
-| Home hash (`#legislation`) | Smooth scroll to `#id` |
-| Other route changes | Smooth scroll to top |
+| Navigation                                   | Scroll                            |
+| -------------------------------------------- | --------------------------------- |
+| Sector → sector                              | **No scroll** (preserve position) |
+| Language only (`/ka/x` ↔ `/en/x`, same path) | **No scroll**                     |
+| Home hash (`#legislation`)                   | Smooth scroll to `#id`            |
+| Other route changes                          | Smooth scroll to top              |
 
 Uses `isSectorPathname()` from `sectorRoutes.js`.
 
@@ -183,16 +183,16 @@ Uses `isSectorPathname()` from `sectorRoutes.js`.
 
 ### 5.2 Key naming patterns
 
-| Prefix | Use |
-|--------|-----|
-| `sectorRecords*` | Loading, errors, summary, filters |
-| `sectorSubcat_{sector}_{id}` | Subcategory labels |
-| `sectorRecordsTitle*` | Sector page H2 |
-| `{sector}ChartTitle_{recordId}` | Chart title overrides |
-| `chartUnit_*` | Y-axis / title units |
-| `glossary*` | Glossary states |
-| `routeLoading` / `chartLoading` | Suspense fallbacks |
-| `footer*` / `legislationItems` | Footer & legislation arrays |
+| Prefix                          | Use                               |
+| ------------------------------- | --------------------------------- |
+| `sectorRecords*`                | Loading, errors, summary, filters |
+| `sectorSubcat_{sector}_{id}`    | Subcategory labels                |
+| `sectorRecordsTitle*`           | Sector page H2                    |
+| `{sector}ChartTitle_{recordId}` | Chart title overrides             |
+| `chartUnit_*`                   | Y-axis / title units              |
+| `glossary*`                     | Glossary states                   |
+| `routeLoading` / `chartLoading` | Suspense fallbacks                |
+| `footer*` / `legislationItems`  | Footer & legislation arrays       |
 
 ### 5.3 API vs i18n
 
@@ -205,15 +205,15 @@ Uses `isSectorPathname()` from `sectorRoutes.js`.
 
 ### 6.1 API (`src/services/recordsApi.js`)
 
-| Function | Purpose |
-|----------|---------|
-| `fetchRecordsByCategory(categoryId, lang)` | Discover subcategories for a sector |
-| `fetchRecordsByCategoryAndSubCategory(categoryId, subId, lang)` | Records for one subcategory |
-| `mergeRecordsById(groups)` | Dedupe by `record.ID` |
-| `getUniqueSubCategoryIds(records)` | Sorted unique `sub_category` |
-| `normalizeRecordChartData` / `getRecordChartData` | Chart rows for Recharts |
-| `getChartYAxisMax` / `getChartDataMax` | Axis domain |
-| `downloadRecordFile` | Trigger file download |
+| Function                                                        | Purpose                             |
+| --------------------------------------------------------------- | ----------------------------------- |
+| `fetchRecordsByCategory(categoryId, lang)`                      | Discover subcategories for a sector |
+| `fetchRecordsByCategoryAndSubCategory(categoryId, subId, lang)` | Records for one subcategory         |
+| `mergeRecordsById(groups)`                                      | Dedupe by `record.ID`               |
+| `getUniqueSubCategoryIds(records)`                              | Sorted unique `sub_category`        |
+| `normalizeRecordChartData` / `getRecordChartData`               | Chart rows for Recharts             |
+| `getChartYAxisMax` / `getChartDataMax`                          | Axis domain                         |
+| `downloadRecordFile`                                            | Trigger file download               |
 
 **Env:** `VITE_API_BASE_URL` (see `.env.example`). Default: Geostat production API.
 
@@ -236,9 +236,9 @@ URL segment `sports` maps to sector key `sport` (`sectorRoutes.js`).
 
 **Responsibilities:**
 
-1. On mount / category+language change: fetch category → discover subcategory IDs → select all by default.  
-2. Cache each subcategory’s records in `cacheBySubCategory`.  
-3. When user toggles filters: fetch only **missing** subcategory keys (no full list flash).  
+1. On mount / category+language change: fetch category → discover subcategory IDs → select all by default.
+2. Cache each subcategory’s records in `cacheBySubCategory`.
+3. When user toggles filters: fetch only **missing** subcategory keys (no full list flash).
 4. Expose merged `records`, `isLoading`, `isFetchingRecords`, `toggleSubCategory`, etc.
 
 **Scope reset:** When `categoryId` or `language` changes, reset state via `scopeKey` (compare and reset in render — works but fragile; prefer `useEffect` + key on provider in greenfield apps).
@@ -255,33 +255,33 @@ Separate hook: alphabet letters + entries per letter. Loading/error copy uses `g
 
 ### 7.1 Layout stack (`SectorPageLayout.jsx`)
 
-1. `SiteHeader` (sticky, hide on scroll down)  
-2. `SectorBackground` (static hero image + infographic link)  
-3. `SectorMainStatistics` (SECTION_CARDS nav overlapping hero)  
-4. `SectorRecordsList` (filters, list, charts)  
+1. `SiteHeader` (sticky, hide on scroll down)
+2. `SectorBackground` (static hero image + infographic link)
+3. `SectorMainStatistics` (SECTION_CARDS nav overlapping hero)
+4. `SectorRecordsList` (filters, list, charts)
 5. `Footer`
 
 ### 7.2 SECTION_CARDS (`sectionCards.js` + `SectorMainStatistics.jsx`)
 
-- Four links to sector paths; active state from `pathname === /${language}${card.to}`.  
-- Per-sector active colors in `ACTIVE_LINK_CLASS_BY_ID`.  
+- Four links to sector paths; active state from `pathname === /${language}${card.to}`.
+- Per-sector active colors in `ACTIVE_LINK_CLASS_BY_ID`.
 - **No** `descriptionKey` in cards — titles only via `titleKey` → i18n (`sliderHealthAbout`, etc.).
 
 ### 7.3 Records list (`SectorRecordsList.jsx`)
 
-- Subcategory filter grid with images from `sectorSubcategoryUi.js`.  
-- Expandable row actions: chart toggle, Excel download (`recordActionUi.js` classes).  
-- `RecordChartCollapsible`: height/opacity animation; keeps chart mounted briefly on close.  
+- Subcategory filter grid with images from `sectorSubcategoryUi.js`.
+- Expandable row actions: chart toggle, Excel download (`recordActionUi.js` classes).
+- `RecordChartCollapsible`: height/opacity animation; keeps chart mounted briefly on close.
 - **Subtle transition when switching sectors:** `opacity-75` while `isFetchingRecords && records.length > 0` — not full-page fade.
 
 ### 7.4 Sector navigation UX (important)
 
-| Do | Don’t |
-|----|--------|
-| Keep scroll position between sector cards | Scroll to top on every sector change |
-| Single `/:language/:sectorPath` route | Four separate route entries that remount layout |
-| Light opacity on records while refetching | Full-screen fade out/in |
-| `transition-colors` on cards / hero text | `scrollIntoView` on card strip after navigation |
+| Do                                        | Don’t                                           |
+| ----------------------------------------- | ----------------------------------------------- |
+| Keep scroll position between sector cards | Scroll to top on every sector change            |
+| Single `/:language/:sectorPath` route     | Four separate route entries that remount layout |
+| Light opacity on records while refetching | Full-screen fade out/in                         |
+| `transition-colors` on cards / hero text  | `scrollIntoView` on card strip after navigation |
 
 ---
 
@@ -289,16 +289,16 @@ Separate hook: alphabet letters + entries per letter. Loading/error copy uses `g
 
 ### 8.1 Module split
 
-| File | Role |
-|------|------|
-| `index.jsx` | Composes header, plot, legend; bar/line toggle |
-| `useRecordChartState.js` | Series keys, visibility, chart type, bar size |
-| `useRecordChartLayout.js` | Responsive height, tick font size |
-| `RecordChartPlot.jsx` | Recharts `BarChart` / `LineChart` |
-| `RecordChartLegend.jsx` | Toggle series; EN vs KA legend spacing |
-| `chartSeriesColors.js` | Male/female/social-security palette |
-| `chartTheme.js` | `computeScaledBarSize`, dark/light axis colors |
-| `sectorChartUnits.js` | Per record ID: title key, unit key, bar width ratio |
+| File                      | Role                                                |
+| ------------------------- | --------------------------------------------------- |
+| `index.jsx`               | Composes header, plot, legend; bar/line toggle      |
+| `useRecordChartState.js`  | Series keys, visibility, chart type, bar size       |
+| `useRecordChartLayout.js` | Responsive height, tick font size                   |
+| `RecordChartPlot.jsx`     | Recharts `BarChart` / `LineChart`                   |
+| `RecordChartLegend.jsx`   | Toggle series; EN vs KA legend spacing              |
+| `chartSeriesColors.js`    | Male/female/social-security palette                 |
+| `chartTheme.js`           | `computeScaledBarSize`, dark/light axis colors      |
+| `sectorChartUnits.js`     | Per record ID: title key, unit key, bar width ratio |
 
 ### 8.2 Customization by record ID
 
@@ -306,9 +306,9 @@ Maps in `sectorChartUnits.js` and `chartSeriesColors.js` keyed by `(sector, reco
 
 When adding a chart override:
 
-1. Add i18n keys `chartUnit_*` / `{sector}ChartTitle_{id}` in **both** `ka` and `en`.  
-2. Add entries to `SECTOR_RECORD_CHART_*_KEYS` objects.  
-3. Optionally `SECTOR_RECORD_CHART_BAR_WIDTH_RATIO` (e.g. `0.8` for narrower bars).  
+1. Add i18n keys `chartUnit_*` / `{sector}ChartTitle_{id}` in **both** `ka` and `en`.
+2. Add entries to `SECTOR_RECORD_CHART_*_KEYS` objects.
+3. Optionally `SECTOR_RECORD_CHART_BAR_WIDTH_RATIO` (e.g. `0.8` for narrower bars).
 4. Add tests in `chartSeriesColors.test.js` / `recordsApi.chart.test.js` if logic is non-trivial.
 
 ### 8.3 Y-axis
@@ -319,9 +319,9 @@ When adding a chart override:
 
 ## 9. Home layout (`MainLayout.jsx`)
 
-- `BackgroundSlider` only on home (`isHome`).  
-- `LinkSlider` for partner logos (`import.meta.glob` on `assets/images/links/{ka,en}/*`).  
-- `Outlet` for `HomePage` (statistics grid + legislation).  
+- `BackgroundSlider` only on home (`isHome`).
+- `LinkSlider` for partner logos (`import.meta.glob` on `assets/images/links/{ka,en}/*`).
+- `Outlet` for `HomePage` (statistics grid + legislation).
 - Same `SiteHeader` / `Footer` as sector pages.
 
 ---
@@ -330,9 +330,9 @@ When adding a chart override:
 
 ### 10.1 `SiteHeader.jsx`
 
-- Sticky; hides on scroll **down**, shows on scroll **up** (threshold ~4px).  
-- Logo click → `/${language}` + smooth scroll top.  
-- Nav: home sections via hash links; glossary/infographic via `NavLink`.  
+- Sticky; hides on scroll **down**, shows on scroll **up** (threshold ~4px).
+- Logo click → `/${language}` + smooth scroll top.
+- Nav: home sections via hash links; glossary/infographic via `NavLink`.
 - Tools: font scale, dark mode (`useUiPreferences`), TTS (`useVoiceAssistant`), `LanguageSwitcher`.
 
 ### 10.2 Language switch
@@ -346,7 +346,9 @@ When adding a chart override:
 ### 10.4 Analytics
 
 ```jsx
-{import.meta.env.PROD ? <Analytics debug={false} /> : null}
+{
+  import.meta.env.PROD ? <Analytics debug={false} /> : null;
+}
 ```
 
 No analytics in dev (avoids console noise). **Vercel Toolbar** is a separate dashboard feature for team members — not bundled in this repo.
@@ -355,22 +357,22 @@ No analytics in dev (avoids console noise). **Vercel Toolbar** is a separate das
 
 ## 11. Accessibility
 
-- Font scaling via CSS variable / `data-lang` font stacks (`index.css`).  
-- `html.dark` class for dark mode.  
-- TTS: hover/click reads text; exclude chrome with `data-no-tts="true"`.  
-- Loading states: `role="status"`, `aria-live="polite"`.  
-- Errors: `role="alert"`.  
+- Font scaling via CSS variable / `data-lang` font stacks (`index.css`).
+- `html.dark` class for dark mode.
+- TTS: hover/click reads text; exclude chrome with `data-no-tts="true"`.
+- Loading states: `role="status"`, `aria-live="polite"`.
+- Errors: `role="alert"`.
 - Charts: expandable per row; consider future “table view” for screen readers.
 
 ---
 
 ## 12. Performance checklist
 
-- [ ] Lazy route pages (`lazyPages.js`)  
-- [ ] Lazy Recharts (`LazyRecordChartPanel`)  
-- [ ] Subcategory fetch cache in `useSectorRecords`  
-- [ ] `isLoading` only when no records yet; `isFetchingRecords` for background refresh  
-- [ ] Vercel rewrite excludes `/assets/` so chunks load with correct MIME type  
+- [ ] Lazy route pages (`lazyPages.js`)
+- [ ] Lazy Recharts (`LazyRecordChartPanel`)
+- [ ] Subcategory fetch cache in `useSectorRecords`
+- [ ] `isLoading` only when no records yet; `isFetchingRecords` for background refresh
+- [ ] Vercel rewrite excludes `/assets/` so chunks load with correct MIME type
 
 ---
 
@@ -387,12 +389,12 @@ npm run build
 
 ### 13.2 What to test
 
-| Area | File |
-|------|------|
-| Bar size / theme | `chartTheme.test.js` |
-| Series colors/labels | `chartSeriesColors.test.js` |
-| `mergeRecordsById`, `getChartYAxisMax` | `recordsApi.chart.test.js` |
-| `useSectorRecords` discovery + toggle | `useSectorRecords.test.jsx` (mock API) |
+| Area                                   | File                                   |
+| -------------------------------------- | -------------------------------------- |
+| Bar size / theme                       | `chartTheme.test.js`                   |
+| Series colors/labels                   | `chartSeriesColors.test.js`            |
+| `mergeRecordsById`, `getChartYAxisMax` | `recordsApi.chart.test.js`             |
+| `useSectorRecords` discovery + toggle  | `useSectorRecords.test.jsx` (mock API) |
 
 **Pattern:** `vi.mock("../services/recordsApi", async (importOriginal) => ({ ...await importOriginal(), fetchX: vi.fn() }))`.
 
@@ -422,39 +424,39 @@ Build: `npm run build` → `dist/`. Node 20+.
 
 Copy and adapt:
 
-| Artifact | Purpose |
-|----------|---------|
-| `vite.config.js` + `test` block | Vitest + jsdom |
-| `.github/workflows/ci.yml` | CI pipeline |
-| `.env.example` | API URL pattern |
-| `src/routes/AppRoutes.jsx` + `lazyPages.js` | Routing structure |
-| `src/App.jsx` | Suspense + ScrollToTop + title hook |
-| `src/i18n.js` structure | Bilingual keys |
-| `useSectorRecords.js` + context pattern | Filtered cached lists |
-| `RecordChartPanel/` folder | Chart feature module |
-| `ScrollToTop.jsx` + `sectorRoutes.js` | Navigation UX |
-| `vercel.json` | SPA + assets |
+| Artifact                                    | Purpose                             |
+| ------------------------------------------- | ----------------------------------- |
+| `vite.config.js` + `test` block             | Vitest + jsdom                      |
+| `.github/workflows/ci.yml`                  | CI pipeline                         |
+| `.env.example`                              | API URL pattern                     |
+| `src/routes/AppRoutes.jsx` + `lazyPages.js` | Routing structure                   |
+| `src/App.jsx`                               | Suspense + ScrollToTop + title hook |
+| `src/i18n.js` structure                     | Bilingual keys                      |
+| `useSectorRecords.js` + context pattern     | Filtered cached lists               |
+| `RecordChartPanel/` folder                  | Chart feature module                |
+| `ScrollToTop.jsx` + `sectorRoutes.js`       | Navigation UX                       |
+| `vercel.json`                               | SPA + assets                        |
 
 ### 15.2 Greenfield checklist
 
-1. React + Vite + Tailwind v4 + React Router.  
-2. Language prefix routes; validate unknown segments.  
-3. One param route for “tabs” that should **not** remount shell (like sectors).  
-4. Central `i18n.js`; no placeholder copy in UI.  
-5. API module + pure helpers + hooks; mock API in tests.  
-6. Lazy heavy deps (charts, PDF viewer, etc.).  
-7. CI: lint, prettier check, test, build.  
+1. React + Vite + Tailwind v4 + React Router.
+2. Language prefix routes; validate unknown segments.
+3. One param route for “tabs” that should **not** remount shell (like sectors).
+4. Central `i18n.js`; no placeholder copy in UI.
+5. API module + pure helpers + hooks; mock API in tests.
+6. Lazy heavy deps (charts, PDF viewer, etc.).
+7. CI: lint, prettier check, test, build.
 8. Document env vars and CORS expectations.
 
 ### 15.3 Anti-patterns (learned on this project)
 
-- Dead `fetchRecords()` on home with no UI.  
-- Duplicate sector routes → full remount + jarring UX.  
-- Full-page opacity fade on sector change.  
-- `scrollIntoView` + `scrollTo(0)` + sticky header hide logic together.  
-- Raw `error.message` in UI — use `t("…LoadError")`.  
-- `statisticsText`-style unused i18n keys.  
-- Analytics in dev with debug logging.  
+- Dead `fetchRecords()` on home with no UI.
+- Duplicate sector routes → full remount + jarring UX.
+- Full-page opacity fade on sector change.
+- `scrollIntoView` + `scrollTo(0)` + sticky header hide logic together.
+- Raw `error.message` in UI — use `t("…LoadError")`.
+- `statisticsText`-style unused i18n keys.
+- Analytics in dev with debug logging.
 - SPA rewrite catching `/assets/*`.
 
 ---
@@ -473,18 +475,18 @@ Optional: add a Cursor rule in `.cursor/rules/` that links to this file for proj
 
 ## 17. Key file index (quick lookup)
 
-| Need to change… | Start here |
-|-----------------|------------|
-| Route list / order | `src/routes/AppRoutes.jsx` |
-| Sector URL ↔ API category | `src/constants/sectorRoutes.js`, `sectorCategories.js` |
-| Chart title/unit for record ID | `src/constants/sectorChartUnits.js`, `src/i18n.js` |
-| Series colors | `src/utils/chartSeriesColors.js` |
-| Subcategory labels/images | `src/constants/sectorSubcategoryUi.js` |
-| Loading/error copy | `src/i18n.js` |
-| API base URL | `src/services/recordsApi.js`, `.env.example` |
-| CI | `.github/workflows/ci.yml` |
-| Deploy rewrites | `vercel.json` |
+| Need to change…                | Start here                                             |
+| ------------------------------ | ------------------------------------------------------ |
+| Route list / order             | `src/routes/AppRoutes.jsx`                             |
+| Sector URL ↔ API category      | `src/constants/sectorRoutes.js`, `sectorCategories.js` |
+| Chart title/unit for record ID | `src/constants/sectorChartUnits.js`, `src/i18n.js`     |
+| Series colors                  | `src/utils/chartSeriesColors.js`                       |
+| Subcategory labels/images      | `src/constants/sectorSubcategoryUi.js`                 |
+| Loading/error copy             | `src/i18n.js`                                          |
+| API base URL                   | `src/services/recordsApi.js`, `.env.example`           |
+| CI                             | `.github/workflows/ci.yml`                             |
+| Deploy rewrites                | `vercel.json`                                          |
 
 ---
 
-*Last aligned with `main` after sector in-place navigation, Vitest CI, and RecordChartPanel module split.*
+_Last aligned with `main` after sector in-place navigation, Vitest CI, and RecordChartPanel module split._
