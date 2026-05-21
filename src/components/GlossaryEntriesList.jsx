@@ -28,8 +28,8 @@ export default function GlossaryEntriesList({
 
   if (isLoading) {
     return (
-      <p className={statusTextClasses} aria-live="polite">
-        …
+      <p className={statusTextClasses} role="status" aria-live="polite">
+        {t("glossaryLoading")}
       </p>
     );
   }

@@ -60,9 +60,10 @@ function GlossaryAlphabetPanel({
             "text-xs text-[#37496d]/80 dark:text-white/80",
             "mt-3 min-[501px]:mt-5 md:mt-8 lg:mt-10 xl:mt-12",
           )}
+          role="status"
           aria-live="polite"
         >
-          …
+          {t("glossaryLoading")}
         </p>
       ) : null}
 
@@ -80,82 +81,82 @@ function GlossaryAlphabetPanel({
 
       {letters.length > 0 ? (
         <>
-        <nav
-          aria-label={t("glossaryAlphabetNav")}
-          className={clsx(
-            "max-w-full overflow-x-auto overscroll-x-contain",
-            "grid w-max max-w-none grid-flow-row grid-rows-4 lg:grid-rows-3",
-            "gap-x-0.5 gap-y-1 min-[501px]:gap-x-1.5 min-[501px]:gap-y-2 md:gap-x-2.5 md:gap-y-3 lg:gap-x-3",
-          )}
-          style={{
-            gridTemplateColumns: `repeat(${columnCount}, max-content)`,
-          }}
-        >
-          {letters.map(({ letter, apiKey, hasGlossary }) => {
-            const isSelected = selectedLetterKey === apiKey;
-            const fontStyle = !isEn
-              ? { fontFamily: "myFont, var(--app-font)" }
-              : undefined;
+          <nav
+            aria-label={t("glossaryAlphabetNav")}
+            className={clsx(
+              "max-w-full overflow-x-auto overscroll-x-contain",
+              "grid w-max max-w-none grid-flow-row grid-rows-4 lg:grid-rows-3",
+              "gap-x-0.5 gap-y-1 min-[501px]:gap-x-1.5 min-[501px]:gap-y-2 md:gap-x-2.5 md:gap-y-3 lg:gap-x-3",
+            )}
+            style={{
+              gridTemplateColumns: `repeat(${columnCount}, max-content)`,
+            }}
+          >
+            {letters.map(({ letter, apiKey, hasGlossary }) => {
+              const isSelected = selectedLetterKey === apiKey;
+              const fontStyle = !isEn
+                ? { fontFamily: "myFont, var(--app-font)" }
+                : undefined;
 
-            if (!hasGlossary) {
+              if (!hasGlossary) {
+                return (
+                  <span
+                    key={apiKey}
+                    className={clsx(
+                      letterBaseClasses,
+                      "border-[#a4d0fc] text-[#37496d] opacity-30 dark:text-white",
+                    )}
+                    style={fontStyle}
+                    aria-disabled
+                    title={t("glossaryLetterEmpty", { letter })}
+                  >
+                    {letter}
+                  </span>
+                );
+              }
+
               return (
-                <span
+                <button
                   key={apiKey}
+                  type="button"
+                  onClick={() => onLetterSelect?.(apiKey)}
                   className={clsx(
                     letterBaseClasses,
-                    "border-[#a4d0fc] text-[#37496d] opacity-30 dark:text-white",
+                    "cursor-pointer bg-transparent",
+                    isSelected
+                      ? LETTER_ACTIVE_CLASSES
+                      : "border-[#a4d0fc] text-[#37496d] hover:text-[#0a58ca] dark:text-white dark:hover:text-blue-400",
                   )}
                   style={fontStyle}
-                  aria-disabled
-                  title={t("glossaryLetterEmpty", { letter })}
+                  aria-pressed={isSelected}
+                  aria-label={t("glossaryFilterByLetter", { letter })}
+                  title={t("glossaryFilterByLetter", { letter })}
                 >
                   {letter}
-                </span>
+                </button>
               );
+            })}
+          </nav>
+          <button
+            type="button"
+            onClick={() => onClearLetter?.()}
+            disabled={!selectedLetterKey}
+            className={clsx(
+              "mt-1 self-start rounded border border-[#6f798d] bg-transparent",
+              "min-[501px]:mt-1.5 md:mt-2",
+              "px-1.5 py-1 min-[501px]:px-2 min-[501px]:py-1 md:px-2.5 md:py-1 lg:px-3 lg:py-1.5",
+              "text-[7px] font-bold min-[501px]:text-[8px] md:text-[9px] lg:text-[10px]",
+              "text-[#6f798d] transition-colors duration-200 ease-in-out",
+              selectedLetterKey
+                ? "cursor-pointer hover:text-[#37496d] dark:hover:text-slate-300"
+                : "cursor-default opacity-50",
+            )}
+            style={
+              !isEn ? { fontFamily: "myFont, var(--app-font)" } : undefined
             }
-
-            return (
-              <button
-                key={apiKey}
-                type="button"
-                onClick={() => onLetterSelect?.(apiKey)}
-                className={clsx(
-                  letterBaseClasses,
-                  "cursor-pointer bg-transparent",
-                  isSelected
-                    ? LETTER_ACTIVE_CLASSES
-                    : "border-[#a4d0fc] text-[#37496d] hover:text-[#0a58ca] dark:text-white dark:hover:text-blue-400",
-                )}
-                style={fontStyle}
-                aria-pressed={isSelected}
-                aria-label={t("glossaryFilterByLetter", { letter })}
-                title={t("glossaryFilterByLetter", { letter })}
-              >
-                {letter}
-              </button>
-            );
-          })}
-        </nav>
-        <button
-          type="button"
-          onClick={() => onClearLetter?.()}
-          disabled={!selectedLetterKey}
-          className={clsx(
-            "mt-1 self-start rounded border border-[#6f798d] bg-transparent",
-            "min-[501px]:mt-1.5 md:mt-2",
-            "px-1.5 py-1 min-[501px]:px-2 min-[501px]:py-1 md:px-2.5 md:py-1 lg:px-3 lg:py-1.5",
-            "text-[7px] font-bold min-[501px]:text-[8px] md:text-[9px] lg:text-[10px]",
-            "text-[#6f798d] transition-colors duration-200 ease-in-out",
-            selectedLetterKey
-              ? "cursor-pointer hover:text-[#37496d] dark:hover:text-slate-300"
-              : "cursor-default opacity-50",
-          )}
-          style={
-            !isEn ? { fontFamily: "myFont, var(--app-font)" } : undefined
-          }
-        >
-          {t("glossaryRefresh")}
-        </button>
+          >
+            {t("glossaryRefresh")}
+          </button>
         </>
       ) : null}
     </div>

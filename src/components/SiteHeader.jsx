@@ -48,8 +48,7 @@ export default function SiteHeader() {
     "border-transparent text-slate-700 hover:border-current hover:text-blue-700 dark:text-slate-300 dark:hover:border-current dark:hover:text-blue-300";
 
   useEffect(() => {
-    let lastScrollY =
-      typeof window !== "undefined" ? window.scrollY : 0;
+    let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
 
     const onScroll = () => {
       const currentY = window.scrollY;
@@ -118,160 +117,161 @@ export default function SiteHeader() {
           "xl:px-15 2xl:px-20",
         )}
       >
-      <div className="flex items-center justify-center gap-4">
-        <button
-          type="button"
-          onClick={handleLogoClick}
-          className="cursor-pointer"
-          aria-label={t("home")}
-        >
-          <img src={logoSrc} alt={t("geoStatLogoAlt")} className="max-h-11" />
-        </button>
-        <h1
-          className={`max-w-xl min-w-[200px] text-sm leading-tight font-semibold uppercase sm:text-base ${
-            theme === "dark" ? "text-slate-100" : "text-slate-900"
-          }`}
-        >
-          {t("headerPortalTitle")}
-        </h1>
-      </div>
-
-      <div
-        className={clsx(
-          "flex w-full flex-row items-start justify-center gap-3",
-          "max-[1360px]:flex-col max-[1360px]:items-end max-md:flex-row",
-          "max-md:items-center max-md:gap-5 min-[1360px]:gap-10",
-          "md:max-lg:items-center lg:w-auto lg:justify-end",
-        )}
-      >
-        <div ref={mobileNavContainerRef} className="relative flex">
+        <div className="flex items-center justify-center gap-4">
           <button
             type="button"
-            className="cursor-pointer text-slate-700 md:hidden dark:text-slate-300"
-            aria-label={isMobileNavOpen ? "Close menu" : "Open menu"}
-            onClick={() => setIsMobileNavOpen((open) => !open)}
+            onClick={handleLogoClick}
+            className="cursor-pointer"
+            aria-label={t("home")}
           >
-            {isMobileNavOpen ? (
-              <MdClose className="text-2xl" />
-            ) : (
-              <MdMenu className="text-2xl" />
-            )}
+            <img src={logoSrc} alt={t("geoStatLogoAlt")} className="max-h-11" />
           </button>
-          <nav
+          <h1
             className={clsx(
-              isMobileNavOpen ? "max-md:flex" : "max-md:hidden",
-              "max-md:absolute max-md:top-full max-md:right-auto max-md:left-full",
-              "max-md:z-50 max-md:mt-2 max-md:ml-2 max-md:max-w-[calc(100vw-1rem)]",
-              "max-md:min-w-48 max-md:flex-col max-md:gap-2 max-md:overflow-x-auto",
-              "max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white",
-              "max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row",
-              "md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end",
-              "max-md:dark:border-slate-700 max-md:dark:bg-slate-900",
-              "max-md:dark:text-slate-200",
+              "max-w-xl min-w-[200px] text-sm leading-tight font-semibold sm:text-base",
+              theme === "dark" ? "text-slate-100" : "text-slate-900",
             )}
           >
-            <Link
-              to={`/${language}#main-statistics`}
-              onClick={() => setIsMobileNavOpen(false)}
-              className={clsx(
-                navLinkBaseClasses,
-                isHomeRoute && activeHash === "#main-statistics"
-                  ? navLinkActiveClasses
-                  : navLinkInactiveClasses,
-              )}
-            >
-              {t("mainStatistics")}
-            </Link>
-            <Link
-              to={`/${language}#legislation`}
-              onClick={() => setIsMobileNavOpen(false)}
-              className={clsx(
-                navLinkBaseClasses,
-                isHomeRoute && activeHash === "#legislation"
-                  ? navLinkActiveClasses
-                  : navLinkInactiveClasses,
-              )}
-            >
-              {t("legislation")}
-            </Link>
-            <Link
-              to={`/${language}#links`}
-              onClick={() => setIsMobileNavOpen(false)}
-              className={clsx(
-                navLinkBaseClasses,
-                isHomeRoute && activeHash === "#links"
-                  ? navLinkActiveClasses
-                  : navLinkInactiveClasses,
-              )}
-            >
-              {t("links")}
-            </Link>
-            <NavLink
-              to={`/${language}/glossary`}
-              onClick={() => setIsMobileNavOpen(false)}
-              className={({ isActive }) =>
-                clsx(
-                  navLinkBaseClasses,
-                  isActive ? navLinkActiveClasses : navLinkInactiveClasses,
-                )
-              }
-            >
-              {t("glossary")}
-            </NavLink>
-            <NavLink
-              to={`/${language}/infographic`}
-              onClick={() => setIsMobileNavOpen(false)}
-              className={({ isActive }) =>
-                clsx(
-                  navLinkBaseClasses,
-                  isActive ? navLinkActiveClasses : navLinkInactiveClasses,
-                )
-              }
-            >
-              {t("infographic")}
-            </NavLink>
-          </nav>
+            {t("headerPortalTitle")}
+          </h1>
         </div>
 
-        <div className="flex items-center gap-4" data-no-tts="true">
-          <button
-            type="button"
-            onClick={increaseFontSize}
-            aria-label={t("fontSizeButton")}
-            title={`${t("fontSizeButton")} (${fontScale}%)`}
-            className="cursor-pointer"
-          >
-            <MdTextIncrease className="text-lg" />
-          </button>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={theme === "dark" ? t("dayMode") : t("nightMode")}
-            title={theme === "dark" ? t("dayMode") : t("nightMode")}
-            className="cursor-pointer"
-          >
-            {theme === "dark" ? (
-              <MdLightMode className="text-lg" />
-            ) : (
-              <MdDarkMode className="text-lg" />
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsEnabled(!isEnabled)}
-            aria-label={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
-            title={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
-            className="cursor-pointer"
-          >
-            {isEnabled ? (
-              <MdVolumeUp className="text-lg" />
-            ) : (
-              <MdVolumeOff className="text-lg" />
-            )}
-          </button>
-          <LanguageSwitcher />
+        <div
+          className={clsx(
+            "flex w-full flex-row items-start justify-center gap-3",
+            "max-[1360px]:flex-col max-[1360px]:items-end max-md:flex-row",
+            "max-md:items-center max-md:gap-5 min-[1360px]:gap-10",
+            "md:max-lg:items-center lg:w-auto lg:justify-end",
+          )}
+        >
+          <div ref={mobileNavContainerRef} className="relative flex">
+            <button
+              type="button"
+              className="cursor-pointer text-slate-700 md:hidden dark:text-slate-300"
+              aria-label={isMobileNavOpen ? "Close menu" : "Open menu"}
+              onClick={() => setIsMobileNavOpen((open) => !open)}
+            >
+              {isMobileNavOpen ? (
+                <MdClose className="text-2xl" />
+              ) : (
+                <MdMenu className="text-2xl" />
+              )}
+            </button>
+            <nav
+              className={clsx(
+                isMobileNavOpen ? "max-md:flex" : "max-md:hidden",
+                "max-md:absolute max-md:top-full max-md:right-auto max-md:left-full",
+                "max-md:z-50 max-md:mt-2 max-md:ml-2 max-md:max-w-[calc(100vw-1rem)]",
+                "max-md:min-w-48 max-md:flex-col max-md:gap-2 max-md:overflow-x-auto",
+                "max-md:rounded-md max-md:border max-md:border-slate-200 max-md:bg-white",
+                "max-md:p-3 max-md:text-slate-700 max-md:shadow-md md:flex md:flex-row",
+                "md:justify-start md:gap-x-4 md:gap-y-2 lg:justify-end",
+                "max-md:dark:border-slate-700 max-md:dark:bg-slate-900",
+                "max-md:dark:text-slate-200",
+              )}
+            >
+              <Link
+                to={`/${language}#main-statistics`}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={clsx(
+                  navLinkBaseClasses,
+                  isHomeRoute && activeHash === "#main-statistics"
+                    ? navLinkActiveClasses
+                    : navLinkInactiveClasses,
+                )}
+              >
+                {t("mainStatistics")}
+              </Link>
+              <Link
+                to={`/${language}#legislation`}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={clsx(
+                  navLinkBaseClasses,
+                  isHomeRoute && activeHash === "#legislation"
+                    ? navLinkActiveClasses
+                    : navLinkInactiveClasses,
+                )}
+              >
+                {t("legislation")}
+              </Link>
+              <Link
+                to={`/${language}#links`}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={clsx(
+                  navLinkBaseClasses,
+                  isHomeRoute && activeHash === "#links"
+                    ? navLinkActiveClasses
+                    : navLinkInactiveClasses,
+                )}
+              >
+                {t("links")}
+              </Link>
+              <NavLink
+                to={`/${language}/glossary`}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={({ isActive }) =>
+                  clsx(
+                    navLinkBaseClasses,
+                    isActive ? navLinkActiveClasses : navLinkInactiveClasses,
+                  )
+                }
+              >
+                {t("glossary")}
+              </NavLink>
+              <NavLink
+                to={`/${language}/infographic`}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={({ isActive }) =>
+                  clsx(
+                    navLinkBaseClasses,
+                    isActive ? navLinkActiveClasses : navLinkInactiveClasses,
+                  )
+                }
+              >
+                {t("infographic")}
+              </NavLink>
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-4" data-no-tts="true">
+            <button
+              type="button"
+              onClick={increaseFontSize}
+              aria-label={t("fontSizeButton")}
+              title={`${t("fontSizeButton")} (${fontScale}%)`}
+              className="cursor-pointer"
+            >
+              <MdTextIncrease className="text-lg" />
+            </button>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? t("dayMode") : t("nightMode")}
+              title={theme === "dark" ? t("dayMode") : t("nightMode")}
+              className="cursor-pointer"
+            >
+              {theme === "dark" ? (
+                <MdLightMode className="text-lg" />
+              ) : (
+                <MdDarkMode className="text-lg" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEnabled(!isEnabled)}
+              aria-label={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
+              title={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
+              className="cursor-pointer"
+            >
+              {isEnabled ? (
+                <MdVolumeUp className="text-lg" />
+              ) : (
+                <MdVolumeOff className="text-lg" />
+              )}
+            </button>
+            <LanguageSwitcher />
+          </div>
         </div>
-      </div>
       </div>
     </header>
   );

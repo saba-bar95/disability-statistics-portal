@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { useSectorRecords } from "../context/SectorRecordsContext";
+import ChartLoadingFallback from "./ChartLoadingFallback";
+import LazyRecordChartPanel from "./LazyRecordChartPanel";
 import RecordChartCollapsible from "./RecordChartCollapsible";
-import RecordChartPanel from "./RecordChartPanel";
 import { getRecordChartDisplayTitle } from "../constants/sectorChartUnits";
 import {
   downloadRecordFile,
@@ -104,8 +105,12 @@ export default function SectorRecordsList({ sector }) {
     return (
       <div className="mt-6 space-y-4">
         {sectorTitle}
-        <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-          {t("statisticsText")}
+        <p
+          className="text-center text-sm text-slate-600 dark:text-slate-400"
+          role="status"
+          aria-live="polite"
+        >
+          {t("sectorRecordsLoading")}
         </p>
       </div>
     );
@@ -119,7 +124,7 @@ export default function SectorRecordsList({ sector }) {
           className="text-center text-sm text-red-600 dark:text-red-400"
           role="alert"
         >
-          {error.message}
+          {t("sectorRecordsLoadError")}
         </p>
       </div>
     );
@@ -260,8 +265,12 @@ export default function SectorRecordsList({ sector }) {
       </div>
 
       {isLoading && records.length === 0 ? (
-        <p className="text-sm text-slate-600 dark:text-slate-400">
-          {t("statisticsText")}
+        <p
+          className="text-sm text-slate-600 dark:text-slate-400"
+          role="status"
+          aria-live="polite"
+        >
+          {t("sectorRecordsLoading")}
         </p>
       ) : records.length > 0 ? (
         <>
@@ -358,17 +367,20 @@ export default function SectorRecordsList({ sector }) {
                         chartExpanded ? "mt-3 min-[501px]:mt-4" : "mt-0",
                       )}
                     >
-                      <RecordChartPanel
-                        chartData={chartData}
-                        language={language}
-                        sector={sector}
-                        title={getRecordChartDisplayTitle(
-                          record,
-                          sector,
-                          language,
-                          t,
-                        )}
-                      />
+                      <Suspense fallback={<ChartLoadingFallback />}>
+                        <LazyRecordChartPanel
+                          chartData={chartData}
+                          language={language}
+                          sector={sector}
+                          recordId={record.ID}
+                          title={getRecordChartDisplayTitle(
+                            record,
+                            sector,
+                            language,
+                            t,
+                          )}
+                        />
+                      </Suspense>
                     </RecordChartCollapsible>
                   ) : null}
                 </li>
@@ -377,18 +389,16 @@ export default function SectorRecordsList({ sector }) {
           </ul>
 
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {records.length} {language === "en" ? "records" : "ჩანაწერი"} ·{" "}
-            {selectedSubCategoryIds.length} / {availableSubCategoryIds.length}{" "}
-            {language === "en"
-              ? "subcategories selected"
-              : "ქვეკატეგორია არჩეულია"}
+            {t("sectorRecordsSummary", {
+              count: records.length,
+              selected: selectedSubCategoryIds.length,
+              total: availableSubCategoryIds.length,
+            })}
           </p>
         </>
       ) : selectedSubCategoryIds.length === 0 ? (
         <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-          {language === "en"
-            ? "Select at least one data source to view records."
-            : "ჩანაწერების სანახავად აირჩიეთ მინიმუმ ერთი მონაცემთა წყარო."}
+          {t("sectorRecordsSelectSource")}
         </p>
       ) : null}
     </div>

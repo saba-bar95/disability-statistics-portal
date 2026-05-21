@@ -1,28 +1,12 @@
-import { useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { SECTION_CARDS } from "../constants/sectionCards";
-import { fetchRecords } from "../services/recordsApi";
 
 export default function MainStatistics() {
   const { t } = useTranslation();
   const { language = "ka" } = useParams();
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetchRecords(language).catch((error) => {
-      if (isMounted && import.meta.env.DEV) {
-        console.error("[recordsApi] fetch failed:", error);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [language]);
 
   return (
     <section

@@ -5,62 +5,29 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   ka: {
     translation: {
-      portalTitle: "შეზღუდული შესაძლებლობის მქონე პირთა სტატისტიკური პორტალი",
+      portalTitle: "შშმ პირთა სტატისტიკის პორტალი",
       headerPortalTitle: "შშმ პირთა სტატისტიკის პორტალი",
       geoStatLogoAlt: "საქსტატის ლოგო",
       home: "მთავარი",
-      about: "პორტალის შესახებ",
-      statistics: "სტატისტიკა",
-      services: "სერვისები",
       mainStatistics: "სტატისტიკური ინფორმაცია",
       legislation: "კანონმდებლობა",
       links: "ბმულები",
       glossary: "გლოსარიუმი",
       infographic: "ინფოგრაფიკა",
-      heroTitle: "მონაცემები, რომლებიც აძლიერებს ინკლუზიურ გადაწყვეტილებებს",
-      heroText:
-        "პორტალი აერთიანებს მონაცემებს შეზღუდული შესაძლებლობის მქონე პირების შესახებ, რათა დაგეგმვა და მონიტორინგი იყოს უფრო ზუსტი და გამჭვირვალე.",
-      aboutTitle: "რატომ ეს პორტალი",
-      aboutText:
-        "პლატფორმა მხარს უჭერს სახელმწიფო სტრუქტურებს, მკვლევრებს და საზოგადოებას სანდო სტატისტიკური მონაცემებით.",
-      statisticsTitle: "ძირითადი მაჩვენებლები",
-      statisticsText:
-        "აქ შეიძლება განთავსდეს ასაკის, სქესის, რეგიონისა და სერვისებზე წვდომის მიხედვით გაშლილი მაჩვენებლები.",
-      servicesTitle: "ხელმისაწვდომი სერვისები",
-      servicesText:
-        "გვერდი შეიცავს სერვისების კატალოგს, გზამკვლევს, და საკონტაქტო ინფორმაციას მხარდაჭერისთვის.",
-      mainStatisticsText:
-        "ამ სექციაში განთავსდება ქვეყნის მასშტაბით ძირითადი სტატისტიკური მაჩვენებლები შშმ პირების შესახებ.",
-      legislationText:
-        "აქ მოიძებნება შშმ პირთა უფლებებთან, მხარდაჭერასა და სერვისებთან დაკავშირებული საკანონმდებლო დოკუმენტები.",
-      linksText:
-        "სასარგებლო ბმულების სიაში შეგროვებულია ოფიციალური რესურსები, პარტნიორი ორგანიზაციები და დამატებითი ინფორმაცია.",
-      glossaryText:
-        "გლოსარიუმის გვერდი განმარტავს პორტალზე გამოყენებულ ძირითად ტერმინებსა და განმარტებებს.",
       glossaryAlphabetNav: "გლოსარიუმის ანბანი",
+      glossaryLoading: "გლოსარიუმი იტვირთება…",
       glossaryLoadError: "გლოსარიუმის ჩატვირთვა ვერ მოხერხდა",
+      routeLoading: "გვერდი იტვირთება…",
+      chartLoading: "გრაფიკი იტვირთება…",
       glossaryLetterEmpty: "გლოსარიუმი არ არის ასოზე «{{letter}}»",
       glossaryFilterByLetter: "გლოსარიუმი ასოზე «{{letter}}»",
       glossaryNoEntries: "გლოსარიუმის ჩანაწერები ვერ მოიძებნა",
       glossaryRefresh: "განახლება",
-      infographicText:
-        "ინფოგრაფიკის გვერდზე განთავსდება ვიზუალური მასალები, რომლებიც მონაცემებს მარტივად აღსაქმელს ხდის.",
-      educationPageText:
-        "ამ გვერდზე განთავსდება განათლებასთან დაკავშირებული ძირითადი სტატისტიკური ინფორმაცია შშმ პირებისთვის.",
-      healthcarePageText:
-        "ამ გვერდზე განთავსდება ჯანმრთელობის დაცვისა და სერვისებზე ხელმისაწვდომობის მაჩვენებლები.",
-      socialSecurityPageText:
-        "ამ გვერდზე განთავსდება სოციალური უზრუნველყოფის, კეთილდღეობისა და უსაფრთხოების მაჩვენებლები.",
-      sportPageText:
-        "ამ გვერდზე განთავსდება სპორტთან დაკავშირებული სტატისტიკური ინფორმაცია და ინდიკატორები.",
       fontSizeButton: "ფონტის ზომა",
       nightMode: "ღამის რეჟიმი",
       dayMode: "დღის რეჟიმი",
       voiceEnabled: "ხმოვანი ასისტენტი ჩართულია",
       voiceDisabled: "ხმოვანი ასისტენტი გამორთულია",
-      stopVoice: "ხმის გაჩერება",
-      voiceHint:
-        "ტექსტზე მაუსის მიტანისას ან დაკლიკებისას სისტემა ხმამაღლა წაიკითხავს კონტენტს.",
       sliderEduAbout: "განათლება",
       sliderHealthAbout: "ჯანმრთელობის დაცვა",
       sliderSocAbout: "სოციალური უზრუნველყოფა, კეთილდღეობა, უსაფრთხოება",
@@ -70,11 +37,17 @@ const resources = {
       sectorRecordsTitleSport: "სპორტის სტატისტიკა",
       sectorRecordsTitleSocialSecurity:
         "სოციალური უზრუნველყოფა, კეთილდღეობა, უსაფრთხოება",
+      sectorRecordsLoading: "მონაცემები იტვირთება…",
+      sectorRecordsLoadError:
+        "ჩანაწერების ჩატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ მოგვიანებით.",
+      sectorRecordsSelectSource:
+        "ჩანაწერების სანახავად აირჩიეთ მინიმუმ ერთი მონაცემთა წყარო.",
+      sectorRecordsSummary:
+        "{{count}} ჩანაწერი · {{selected}} / {{total}} ქვეკატეგორია არჩეულია",
       sectorSubcat_fallback: "ქვეკატეგორია {{id}}",
       sectorSubcat_healthcare_1:
         "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
-      sectorSubcat_healthcare_2:
-        "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
+      sectorSubcat_healthcare_2: "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
       sectorSubcat_healthcare_3:
         "მრავალინდიკატორული კლასტერული კვლევა (MICS) 2018",
       sectorSubcat_education_1:
@@ -85,12 +58,10 @@ const resources = {
         "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
       sectorSubcat_social_security_1:
         "საქართველოს ოკუპირებული ტერიტორიებიდან დევნილთა, შრომის, ჯანმრთელობისა და სოციალური დაცვის სამინისტრო",
-      sectorSubcat_social_security_2:
-        "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
+      sectorSubcat_social_security_2: "მოსახლეობის 2014 წლის საყოველთაო აღწერა",
       sectorSubcat_social_security_3:
         "მრავალინდიკატორული კლასტერული კვლევა (MICS) 2018",
-      sectorSubcat_sport_1:
-        "საქართველოს კულტურისა და სპორტის სამინისტრო",
+      sectorSubcat_sport_1: "საქართველოს კულტურისა და სპორტის სამინისტრო",
       sectorSubcatFilterGroup: "ფილტრი წყაროთი მონაცემებით",
       sectorRecordDownload: "ფაილის ჩამოტვირთვა",
       sectorRecordToggleChart: "გრაფიკის ჩვენება",
@@ -110,6 +81,18 @@ const resources = {
         "ჯანმრთელობის დაცვის სახელმწიფო პროგრამებით შშმ პირებისთვის დაფინანსებული შემთხვევების/მომსახურების რაოდენობა\nსქესის მიხედვით",
       healthcareChartTitle_8:
         "ჯანმრთელობის დაცვის სახელმწიფო პროგრამების ფარგლებში დაფინანსებული შშმ პირების რიცხოვნობა\nსქესის მიხედვით",
+      socialSecurityChartTitle_82:
+        "სოციალური პაკეტის მიმღები შშმ პირების რიცხოვნობა სქესის მიხედვით",
+      socialSecurityChartTitle_83:
+        "სოციალური პაკეტის მიმღები შშმ პირების რიცხოვნობა",
+      socialSecurityChartTitle_84:
+        "დევნილის სტატუსის მქონე სოციალური პაკეტის მიმღები შშმ პირების რიცხოვნობა",
+      socialSecurityChartTitle_85:
+        "მიზნობრივი სოციალური დახმარების პროგრამის მონაცემთა ერთიან ბაზაში რეგისტრირებული შშმ პირების რიცხოვნობა",
+      socialSecurityChartTitle_86:
+        "მიზნობრივი სოციალური დახმარების პროგრამის მონაცემთა ერთიან ბაზაში რეგისტრირებული, საარსებო შემწეობის მიმღები შშმ პირების რიცხოვნობა",
+      sportChartTitle_127:
+        "პარალიმპიურ სახეობებში აღებული მედალების რაოდენობა სპორტსმენების სქესის მიხედვით",
       sliderPdfLink: "ინფოგრაფიკა",
       closePdfModal: "დახურვა",
       sliderPrev: "წინა სლაიდი",
@@ -142,62 +125,29 @@ const resources = {
   },
   en: {
     translation: {
-      portalTitle: "Statistical Portal on Persons with Disabilities",
-      headerPortalTitle: "STATISTICAL PORTAL ON PERSONS WITH DISABILITIES",
+      portalTitle: "Disability Statistics Portal",
+      headerPortalTitle: "Disability Statistics Portal",
       geoStatLogoAlt: "GeoStat logo",
       home: "Home",
-      about: "About",
-      statistics: "Statistics",
-      services: "Services",
       mainStatistics: "MAIN STATISTICS",
       legislation: "LEGISLATION",
       links: "LINKS",
       glossary: "GLOSSARY",
       infographic: "INFOGRAPHIC",
-      heroTitle: "Data that supports inclusive decisions",
-      heroText:
-        "The portal combines disability-related data to improve planning, monitoring, and transparency.",
-      aboutTitle: "Why this portal",
-      aboutText:
-        "The platform supports government teams, researchers, and communities with reliable statistical information.",
-      statisticsTitle: "Key indicators",
-      statisticsText:
-        "Use this page for indicators by age, gender, region, and service accessibility.",
-      servicesTitle: "Available services",
-      servicesText:
-        "This section can provide a service catalog, guidance, and contact channels for support.",
-      mainStatisticsText:
-        "This section presents key country-level disability statistics and headline indicators.",
-      legislationText:
-        "This section includes core legal documents related to disability rights, support, and services.",
-      linksText:
-        "This section provides useful links to official sources, partner organizations, and additional resources.",
-      glossaryText:
-        "The glossary page explains key terms and definitions used throughout the portal.",
       glossaryAlphabetNav: "Glossary alphabet",
+      glossaryLoading: "Loading glossary…",
       glossaryLoadError: "Could not load glossary",
+      routeLoading: "Loading page…",
+      chartLoading: "Loading chart…",
       glossaryLetterEmpty: "No glossary entries for “{{letter}}”",
       glossaryFilterByLetter: "Glossary entries for “{{letter}}”",
       glossaryNoEntries: "No glossary entries found",
       glossaryRefresh: "Refresh",
-      infographicText:
-        "The infographic page presents visual summaries to make statistical insights easier to understand.",
-      educationPageText:
-        "This page presents key disability-related statistics and indicators for education.",
-      healthcarePageText:
-        "This page presents indicators on healthcare and accessibility of health services.",
-      socialSecurityPageText:
-        "This page presents indicators on social security, well-being, and safety.",
-      sportPageText:
-        "This page presents disability-related statistics and indicators for sport.",
       fontSizeButton: "Font size",
       nightMode: "Night mode",
       dayMode: "Day mode",
       voiceEnabled: "Voice assistant is enabled",
       voiceDisabled: "Voice assistant is disabled",
-      stopVoice: "Stop voice",
-      voiceHint:
-        "When you hover or click text, the system reads the related content aloud.",
       sliderEduAbout: "Education",
       sliderHealthAbout: "HEALTHCARE",
       sliderSocAbout: "SOCIAL SECURITY, WELL-BEING AND SAFETY",
@@ -207,11 +157,18 @@ const resources = {
       sectorRecordsTitleSport: "Sport statistics",
       sectorRecordsTitleSocialSecurity:
         "SOCIAL SECURITY, WELL-BEING AND SAFETY",
+      sectorRecordsLoading: "Loading data…",
+      sectorRecordsLoadError: "Could not load records. Please try again later.",
+      sectorRecordsSelectSource:
+        "Select at least one data source to view records.",
+      sectorRecordsSummary:
+        "{{count}} records · {{selected}} / {{total}} subcategories selected",
       sectorSubcat_fallback: "Subcategory {{id}}",
       sectorSubcat_healthcare_1:
         "Ministry of Internally Displaced Persons from The Occupied Territories, Labour, Health and Social Affairs of Georgia",
       sectorSubcat_healthcare_2: "2014 GENERAL POPULATION CENSUS",
-      sectorSubcat_healthcare_3: "Multiple Indicator Cluster Survey (MICS) 2018",
+      sectorSubcat_healthcare_3:
+        "Multiple Indicator Cluster Survey (MICS) 2018",
       sectorSubcat_education_1: "Ministry of Education and Science of Georgia",
       sectorSubcat_education_2: "Multiple Indicator Cluster Survey (MICS) 2018",
       sectorSubcat_education_3:
@@ -219,7 +176,8 @@ const resources = {
       sectorSubcat_social_security_1:
         "Ministry of Internally Displaced Persons from The Occupied Territories, Labour, Health and Social Affairs of Georgia",
       sectorSubcat_social_security_2: "2014 GENERAL POPULATION CENSUS",
-      sectorSubcat_social_security_3: "Multiple Indicator Cluster Survey (MICS) 2018",
+      sectorSubcat_social_security_3:
+        "Multiple Indicator Cluster Survey (MICS) 2018",
       sectorSubcat_sport_1: "Ministry of Culture, Sport and Youth of Georgia",
       sectorSubcatFilterGroup: "Filter by data source",
       sectorRecordDownload: "Download file",
@@ -240,6 +198,18 @@ const resources = {
         "Number of cases/services funded by state health care programs for persons with disabilities\nby sex",
       healthcareChartTitle_8:
         "The number of persons with disabilities financed within the framework of state health care programs\nby sex",
+      socialSecurityChartTitle_82:
+        "Persons with disabilities receiving the social package by sex",
+      socialSecurityChartTitle_83:
+        "Persons with disabilities receiving the social package",
+      socialSecurityChartTitle_84:
+        "Number of Internaly displaced Disability Persons receiving social package",
+      socialSecurityChartTitle_85:
+        "Persons with disabilities registered in the Unified database of targeted social assistance program",
+      socialSecurityChartTitle_86:
+        "Disabilitie persons, registered in the Unified database of targeted social assistance program, receiving subsistence allowance",
+      sportChartTitle_127:
+        "Number of Medals won in Paralympic Sports by Age and Sex of Sportsmen",
       sliderPdfLink: "Infographic",
       closePdfModal: "Close",
       sliderPrev: "Previous slide",

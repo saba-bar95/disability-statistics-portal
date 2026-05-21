@@ -15,28 +15,24 @@ const SECTION_CARDS_BASE = [
   {
     id: "healthcare",
     titleKey: "sliderHealthAbout",
-    descriptionKey: "healthcarePageText",
     to: "/healthcare",
     icon: healthcareSvg,
   },
   {
     id: "education",
     titleKey: "sliderEduAbout",
-    descriptionKey: "educationPageText",
     to: "/education",
     icon: educationSvg,
   },
   {
     id: "social-security",
     titleKey: "sliderSocAbout",
-    descriptionKey: "socialSecurityPageText",
     to: "/social-security",
     icon: socialSvg,
   },
   {
     id: "sport",
     titleKey: "sliderSportAbout",
-    descriptionKey: "sportPageText",
     to: "/sports",
     icon: sportSvg,
   },
