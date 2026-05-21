@@ -8,4 +8,9 @@ export default defineConfig({
     host: "0.0.0.0", // Allow access from all network interfaces
     port: 3000, // Default port (you can change it if needed)
   },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.js"],
+    globals: false,
+  },
 });
