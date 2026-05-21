@@ -7,6 +7,33 @@ const SECTOR_RECORD_CHART_UNIT_KEYS = {
     7: "chartUnit_persons",
     8: "chartUnit_persons",
   },
+  education: {
+    111: "chartUnit_persons",
+    126: "chartUnit_persons",
+  },
+  "social-security": {
+    82: "chartUnit_persons",
+    83: "chartUnit_persons",
+    84: "chartUnit_persons",
+    85: "chartUnit_persons",
+    86: "chartUnit_persons",
+    90: "chartUnit_persons",
+  },
+  sport: {
+    127: "chartUnit_persons",
+  },
+};
+
+/** Fraction of Recharts’ auto bar width (per sector + record ID). */
+const SECTOR_RECORD_CHART_BAR_WIDTH_RATIO = {
+  education: {
+    126: 0.8,
+  },
+  "social-security": {
+    83: 0.8,
+    84: 0.8,
+    90: 0.8,
+  },
 };
 
 /** i18n keys for chart titles (override API titles), by sector + record ID. */
@@ -18,7 +45,25 @@ const SECTOR_RECORD_CHART_TITLE_KEYS = {
     7: "healthcareChartTitle_7",
     8: "healthcareChartTitle_8",
   },
+  "social-security": {
+    82: "socialSecurityChartTitle_82",
+    83: "socialSecurityChartTitle_83",
+    84: "socialSecurityChartTitle_84",
+    85: "socialSecurityChartTitle_85",
+    86: "socialSecurityChartTitle_86",
+  },
+  sport: {
+    127: "sportChartTitle_127",
+  },
 };
+
+/** Bar width as a fraction of Recharts default (e.g. 0.8), or undefined for full width. */
+export function getRecordChartBarWidthRatio(sector, recordId) {
+  if (sector == null || recordId == null) {
+    return undefined;
+  }
+  return SECTOR_RECORD_CHART_BAR_WIDTH_RATIO[sector]?.[recordId];
+}
 
 /** Returns i18n key for chart unit (e.g. chartUnit_persons), or null. */
 export function getRecordChartUnitKey(sector, recordId) {
