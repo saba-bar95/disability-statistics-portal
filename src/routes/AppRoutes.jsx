@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import { SECTOR_ROUTES } from "../constants/sectorRoutes";
 import {
   GlossaryPage,
   HomePage,
@@ -8,17 +7,15 @@ import {
   SectorPage,
 } from "./lazyPages";
 
-const sectorRoutes = SECTOR_ROUTES.map(({ path }) => ({
-  path: `/:language/${path}`,
-  element: <SectorPage />,
-}));
-
 const routes = [
   {
     path: "/",
     element: <Navigate to="/ka" replace />,
   },
-  ...sectorRoutes,
+  {
+    path: "/:language/:sectorPath",
+    element: <SectorPage />,
+  },
   {
     path: "/:language",
     element: <MainLayout />,

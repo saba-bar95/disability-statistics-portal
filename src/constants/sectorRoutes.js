@@ -15,3 +15,13 @@ export function getSectorFromPathname(pathname) {
   const segment = pathname.split("/").filter(Boolean)[1];
   return PATH_TO_SECTOR[segment] ?? null;
 }
+
+/** Resolve sector key from URL segment (`education`, `healthcare`, …). */
+export function getSectorFromPathSegment(segment) {
+  return PATH_TO_SECTOR[segment] ?? null;
+}
+
+/** True when pathname is a thematic sector route (not home, glossary, etc.). */
+export function isSectorPathname(pathname) {
+  return getSectorFromPathname(pathname) != null;
+}
