@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { isSectorPathname } from "../constants/sectorRoutes";
 
 const SUPPORTED_LANGS = ["ka", "en"];
 
@@ -33,8 +34,9 @@ export default function ScrollToTop() {
   const prevPathname = useRef(pathname);
 
   useEffect(() => {
-    const pathnameChanged = prevPathname.current !== pathname;
-    const languageOnly = isLanguageOnlyChange(prevPathname.current, pathname);
+    const previousPath = prevPathname.current;
+    const pathnameChanged = previousPath !== pathname;
+    const languageOnly = isLanguageOnlyChange(previousPath, pathname);
     prevPathname.current = pathname;
 
     if (languageOnly) {
@@ -62,6 +64,15 @@ export default function ScrollToTop() {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       });
+      return;
+    }
+
+    const sectorToSector =
+      pathnameChanged &&
+      isSectorPathname(previousPath) &&
+      isSectorPathname(pathname);
+
+    if (sectorToSector) {
       return;
     }
 

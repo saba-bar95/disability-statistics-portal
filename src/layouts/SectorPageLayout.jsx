@@ -13,7 +13,7 @@ import useSectorRecords from "../hooks/useSectorRecords";
 
 const SUPPORTED_LANGS = ["ka", "en"];
 
-/** Background slide id + distinct surface for the page body (not plain white). */
+/** Background slide id per sector route key. */
 const SECTOR_CONFIG = {
   education: {
     slideId: "edu",

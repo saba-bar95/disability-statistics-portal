@@ -44,7 +44,10 @@ export default function SectorBackground({ slideId }) {
       <img
         src={slide.src}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover"
+        className={clsx(
+          "absolute inset-0 h-full w-full object-cover",
+          "transition-opacity duration-300 ease-in-out motion-reduce:transition-none",
+        )}
         aria-hidden
       />
 
@@ -63,10 +66,12 @@ export default function SectorBackground({ slideId }) {
             )}
           >
             <div
+              key={slideId}
               className={clsx(
                 "pointer-events-auto flex max-w-full flex-col gap-4",
                 "w-[88%] max-sm:-translate-y-5",
                 "sm:w-[70%] sm:translate-y-0 sm:gap-6 md:gap-8",
+                "transition-[opacity,color] duration-300 ease-in-out motion-reduce:transition-none",
               )}
             >
               <div className="flex flex-col gap-1 sm:gap-1.5 md:gap-2">

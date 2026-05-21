@@ -86,6 +86,7 @@ export default function SectorRecordsList({ sector }) {
     toggleSubCategory,
     isSubCategorySelected,
     isLoading,
+    isFetchingRecords,
     error,
   } = useSectorRecords();
 
@@ -151,8 +152,13 @@ export default function SectorRecordsList({ sector }) {
     });
   };
 
+  const recordsPanelClass = clsx(
+    "mt-6 space-y-4 transition-opacity duration-200 ease-in-out motion-reduce:transition-none",
+    isFetchingRecords && records.length > 0 && "opacity-75",
+  );
+
   return (
-    <div className="mt-6 space-y-4">
+    <div className={recordsPanelClass}>
       {sectorTitle}
       <div
         className={clsx(

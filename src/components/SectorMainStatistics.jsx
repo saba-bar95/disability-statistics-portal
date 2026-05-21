@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -16,25 +15,9 @@ export default function SectorMainStatistics() {
   const { t } = useTranslation();
   const { language = "ka" } = useParams();
   const { pathname } = useLocation();
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-
-    if (!el) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [pathname]);
 
   return (
     <section
-      ref={sectionRef}
       id="main-statistics"
       className="flex w-full scroll-mt-28 flex-col gap-0"
     >
@@ -57,7 +40,7 @@ export default function SectorMainStatistics() {
                 "mx-auto flex min-h-22 w-full max-w-[220px] flex-col items-center justify-center gap-2 rounded-xl border text-center outline-none",
                 "sm:min-h-24 sm:max-w-[240px] sm:gap-2.5 md:min-h-26 md:max-w-[255px] lg:min-h-28 lg:max-w-[270px] lg:gap-3",
                 "bg-white dark:bg-slate-900",
-                "transition-[transform_1.8s_ease-in-out,border-color_650ms_ease-out,box-shadow_650ms_ease-out]",
+                "transition-[transform_1.8s_ease-in-out,border-color_650ms_ease-out,box-shadow_650ms_ease-out,background-color_650ms_ease-out]",
                 "hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100",
                 isActive
                   ? activeClassName
