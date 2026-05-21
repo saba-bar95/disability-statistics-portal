@@ -29,6 +29,12 @@ Switch language with the flag control in the header.
 
 ---
 
+## Documentation
+
+For a **full architecture guide** (routing, data hooks, charts, i18n, CI, UX patterns, and how to reuse this in future projects), see **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+
+---
+
 ## Data sources
 
 - [National Statistics Office of Georgia (Geostat)](https://www.geostat.ge/en)
