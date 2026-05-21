@@ -1,10 +1,12 @@
 import { Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import GlossaryPage from "../pages/GlossaryPage";
-import HomePage from "../pages/HomePage";
-import InfographicPage from "../pages/InfographicPage";
-import SectorPage from "../pages/SectorPage";
 import { SECTOR_ROUTES } from "../constants/sectorRoutes";
+import {
+  GlossaryPage,
+  HomePage,
+  InfographicPage,
+  SectorPage,
+} from "./lazyPages";
 
 const sectorRoutes = SECTOR_ROUTES.map(({ path }) => ({
   path: `/:language/${path}`,
