@@ -51,9 +51,9 @@ export default function GlossaryPage() {
           className={clsx(
             "absolute top-0 left-1/2 h-auto w-[40%] translate-x-[18%]",
             "max-h-[clamp(12rem,36vh,16rem)] object-contain object-top",
-            "sm:w-[34%] sm:max-h-[clamp(14rem,40vh,20rem)] sm:translate-x-[20%]",
-            "md:w-[30%] md:max-h-[clamp(16rem,44vh,24rem)] md:translate-x-[22%]",
-            "lg:w-[28.02%] lg:max-h-[clamp(18rem,48vh,28rem)] lg:translate-x-[24%]",
+            "sm:max-h-[clamp(14rem,40vh,20rem)] sm:w-[34%] sm:translate-x-[20%]",
+            "md:max-h-[clamp(16rem,44vh,24rem)] md:w-[30%] md:translate-x-[22%]",
+            "lg:max-h-[clamp(18rem,48vh,28rem)] lg:w-[28.02%] lg:translate-x-[24%]",
             "xl:max-h-[clamp(20rem,52vh,32rem)] xl:translate-x-[16%]",
             "2xl:max-h-[clamp(22rem,56vh,36rem)] 2xl:translate-x-[18%]",
             "min-[3000px]:h-full min-[3000px]:max-h-[669px]",

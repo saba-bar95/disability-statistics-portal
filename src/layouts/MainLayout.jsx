@@ -44,7 +44,7 @@ export default function MainLayout() {
           "w-full",
           isFullBleedPage
             ? "max-w-none px-0"
-            : "mx-auto max-w-[1800px] grid gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20",
+            : "mx-auto grid max-w-[1800px] gap-4 px-5 lg:px-10 xl:px-15 2xl:px-20",
           !isHome && !isFullBleedPage && "py-6 md:py-8",
         )}
       >

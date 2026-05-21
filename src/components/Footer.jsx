@@ -30,8 +30,7 @@ const c = {
     "text-[10px] transition-transform duration-300 hover:scale-110 md:text-[11px] lg:text-xs",
   termsLink: "text-white transition-transform duration-300 hover:scale-110",
   divider: "my-5 w-full border-b border-white md:my-6 xl:my-8",
-  bottom:
-    "flex w-full flex-col items-center gap-1.5 text-center text-white",
+  bottom: "flex w-full flex-col items-center gap-1.5 text-center text-white",
   finePrint: "text-[10px] md:text-[11px] lg:text-xs",
 };
 

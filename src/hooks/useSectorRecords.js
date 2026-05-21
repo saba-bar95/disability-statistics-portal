@@ -119,7 +119,13 @@ export default function useSectorRecords(categoryId, language = "ka") {
     return () => {
       isMounted = false;
     };
-  }, [categoryId, language, hasCategory, selectedSubCategoryIds, cacheBySubCategory]);
+  }, [
+    categoryId,
+    language,
+    hasCategory,
+    selectedSubCategoryIds,
+    cacheBySubCategory,
+  ]);
 
   const records = useMemo(() => {
     if (!hasCategory || selectedSubCategoryIds.length === 0) {

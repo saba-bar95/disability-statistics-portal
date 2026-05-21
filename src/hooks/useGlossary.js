@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchGlossaryByLang, fetchGlossaryByLetter } from "../services/glossaryApi";
+import {
+  fetchGlossaryByLang,
+  fetchGlossaryByLetter,
+} from "../services/glossaryApi";
 import { getGlossaryEntries } from "../utils/glossaryEntries";
 import { parseGlossaryLetters } from "../utils/glossaryLetters";
 
@@ -10,7 +13,10 @@ export default function useGlossary(language = "ka") {
     allEntries: [],
     error: null,
   });
-  const [letterFilter, setLetterFilter] = useState({ language: null, key: null });
+  const [letterFilter, setLetterFilter] = useState({
+    language: null,
+    key: null,
+  });
   const [letterSnapshot, setLetterSnapshot] = useState({
     language: null,
     key: null,
@@ -135,8 +141,7 @@ export default function useGlossary(language = "ka") {
       : [];
 
   const isEntriesLoading =
-    isLettersLoading ||
-    (selectedLetterKey != null && !isLetterSnapshotCurrent);
+    isLettersLoading || (selectedLetterKey != null && !isLetterSnapshotCurrent);
 
   const entriesError = selectedLetterKey
     ? isLetterSnapshotCurrent

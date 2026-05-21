@@ -46,8 +46,7 @@ export function getGlossaryEntries(entries) {
 
   return entries
     .filter(
-      (entry) =>
-        entry?.ID != null && String(entry.text ?? "").trim() !== "",
+      (entry) => entry?.ID != null && String(entry.text ?? "").trim() !== "",
     )
     .map((entry) => {
       const { term, definition } = parseGlossaryEntryText(entry.text);
