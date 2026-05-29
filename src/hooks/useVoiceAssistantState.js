@@ -7,16 +7,10 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 
-const INTERACTIVE_TAGS = new Set([
-  "BUTTON",
-  "A",
-  "H1",
-  "H2",
-  "H3",
-  "P",
-  "LI",
-  "SPAN",
-]);
+/** Nearest block used for hover speech (no `li` — record rows wrap charts and read all child text). */
+const SPEAKABLE_SELECTOR = "h1,h2,h3,p,a,button,[data-tts]";
+const VOICE_EXCLUDE_SELECTOR =
+  '[data-no-tts], [data-sector-chart], .recharts-wrapper, .recharts-surface, .recharts-legend-wrapper, .recharts-default-legend, [class*="recharts-"]';
 const TTS_API_URL = "https://tts-api.geostat.ge/request";
 const TTS_API_LANG_MAP = {
   ka: "ka",
@@ -24,7 +18,6 @@ const TTS_API_LANG_MAP = {
 };
 const TTS_MAX_CHARS = 220;
 const HOVER_SPEAK_DELAY_MS = 350;
-const UNHOVER_STOP_DELAY_MS = 1000;
 const PLAYBACK_TIMEOUT_MS = 7000;
 const VOICE_STORAGE_KEY = "ui-voice-assistant-enabled";
 const WARMUP_TEXT_BY_LANG = {
@@ -46,7 +39,15 @@ function asElement(target) {
     return target.parentElement || null;
   }
 
-  return target instanceof Element ? target : null;
+  if (target instanceof Element) {
+    return target;
+  }
+
+  if (typeof SVGElement !== "undefined" && target instanceof SVGElement) {
+    return target;
+  }
+
+  return null;
 }
 
 function splitTextForTts(text, chunkSize = TTS_MAX_CHARS) {
@@ -82,22 +83,51 @@ function splitTextForTts(text, chunkSize = TTS_MAX_CHARS) {
   return chunks;
 }
 
+function supportsClosest(element) {
+  const isDomNode =
+    element instanceof Element ||
+    (typeof SVGElement !== "undefined" && element instanceof SVGElement);
+
+  return isDomNode && typeof element.closest === "function";
+}
+
+function safeClosest(element, selector) {
+  if (!supportsClosest(element)) {
+    return null;
+  }
+
+  try {
+    return element.closest(selector);
+  } catch {
+    return null;
+  }
+}
+
+function isVoiceAssistantExcluded(element) {
+  if (!element) {
+    return true;
+  }
+
+  if (!supportsClosest(element)) {
+    return false;
+  }
+
+  return safeClosest(element, VOICE_EXCLUDE_SELECTOR) !== null;
+}
+
 function getReadableRoot(target) {
   const element = asElement(target);
 
-  if (!element || element.closest('[data-no-tts="true"]')) {
+  if (!element || isVoiceAssistantExcluded(element)) {
     return null;
   }
 
-  if (element.getAttribute?.("data-tts")) {
-    return element;
-  }
-
-  if (!INTERACTIVE_TAGS.has(element.tagName)) {
+  const root = safeClosest(element, SPEAKABLE_SELECTOR);
+  if (!root || isVoiceAssistantExcluded(root)) {
     return null;
   }
 
-  return element;
+  return root;
 }
 
 function extractReadableText(target) {
@@ -142,7 +172,6 @@ export default function useVoiceAssistantState(lang) {
   const audioRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const hoverTimeoutRef = useRef(null);
-  const unhoverStopTimeoutRef = useRef(null);
   const hoverRootRef = useRef(null);
   const hoverSpeakGenerationRef = useRef(0);
 
@@ -153,13 +182,6 @@ export default function useVoiceAssistantState(lang) {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
-    }
-  }, []);
-
-  const clearUnhoverStopTimeout = useCallback(() => {
-    if (unhoverStopTimeoutRef.current) {
-      clearTimeout(unhoverStopTimeoutRef.current);
-      unhoverStopTimeoutRef.current = null;
     }
   }, []);
 
@@ -179,9 +201,9 @@ export default function useVoiceAssistantState(lang) {
   const stopPlayback = useCallback(() => {
     abortActivePlayback();
     clearHoverTimeout();
-    clearUnhoverStopTimeout();
     hoverRootRef.current = null;
-  }, [abortActivePlayback, clearHoverTimeout, clearUnhoverStopTimeout]);
+    hoverSpeakGenerationRef.current += 1;
+  }, [abortActivePlayback, clearHoverTimeout]);
 
   const playAudioUrl = useCallback((audioUrl, token) => {
     return new Promise((resolve, reject) => {
@@ -299,21 +321,25 @@ export default function useVoiceAssistantState(lang) {
     }
   }, [remoteLang]);
 
-  const setIsEnabled = useCallback(
-    (value) => {
-      setIsEnabledState((previous) => {
-        const next = typeof value === "function" ? value(previous) : value;
-        isEnabledRef.current = next;
+  const setIsEnabled = useCallback((value) => {
+    setIsEnabledState((previous) => {
+      const next = typeof value === "function" ? value(previous) : value;
+      isEnabledRef.current = next;
+      try {
         window.localStorage.setItem(VOICE_STORAGE_KEY, next ? "true" : "false");
-        if (!next) {
-          audioUnlockedRef.current = false;
-          stopPlayback();
-        }
-        return next;
-      });
-    },
-    [stopPlayback],
-  );
+      } catch {
+        // Storage may be unavailable in private mode or restricted embeds.
+      }
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isEnabled) {
+      audioUnlockedRef.current = false;
+      stopPlayback();
+    }
+  }, [isEnabled, stopPlayback]);
 
   const toggleEnabled = useCallback(async () => {
     if (isEnabledRef.current) {
@@ -323,10 +349,15 @@ export default function useVoiceAssistantState(lang) {
 
     isEnabledRef.current = true;
     flushSync(() => {
-      setIsEnabled(true);
+      setIsEnabledState(true);
+      try {
+        window.localStorage.setItem(VOICE_STORAGE_KEY, "true");
+      } catch {
+        // Storage may be unavailable.
+      }
     });
     await unlockAudioFromGesture();
-  }, [setIsEnabled, unlockAudioFromGesture]);
+  }, [unlockAudioFromGesture]);
 
   useEffect(() => {
     isEnabledRef.current = isEnabled;
@@ -338,6 +369,11 @@ export default function useVoiceAssistantState(lang) {
     }
 
     const scheduleSpeak = (target) => {
+      const element = asElement(target);
+      if (!element || isVoiceAssistantExcluded(element)) {
+        return;
+      }
+
       const root = getReadableRoot(target);
       const text = extractReadableText(target);
       if (!text || !root) {
@@ -351,10 +387,10 @@ export default function useVoiceAssistantState(lang) {
       const isSwitchingElement =
         hoverRootRef.current && hoverRootRef.current !== root;
 
-      clearUnhoverStopTimeout();
       clearHoverTimeout();
 
       if (isSwitchingElement) {
+        hoverSpeakGenerationRef.current += 1;
         abortActivePlayback();
       }
 
@@ -372,53 +408,61 @@ export default function useVoiceAssistantState(lang) {
     };
 
     const onMouseOver = (event) => {
-      clearUnhoverStopTimeout();
-      const target = event.target;
-      if (
-        hoverRootRef.current &&
-        target instanceof Node &&
-        hoverRootRef.current.contains(target)
-      ) {
-        return;
+      try {
+        const target = event.target;
+        const root = hoverRootRef.current;
+        if (
+          root instanceof Element &&
+          target instanceof Node &&
+          root.contains(target)
+        ) {
+          return;
+        }
+        scheduleSpeak(target);
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn("[voice-assistant] mouseover failed", error);
+        }
       }
-      scheduleSpeak(target);
     };
 
     const onMouseOut = (event) => {
-      const root = hoverRootRef.current;
-      if (!root) {
-        return;
-      }
-      const related = event.relatedTarget;
-      if (related instanceof Node && root.contains(related)) {
-        return;
-      }
-      if (!audioRef.current && !window.speechSynthesis?.speaking) {
-        clearUnhoverStopTimeout();
+      try {
+        const root = hoverRootRef.current;
+        if (!(root instanceof Element)) {
+          return;
+        }
+        const related = event.relatedTarget;
+        if (related instanceof Node && root.contains(related)) {
+          return;
+        }
+
+        hoverSpeakGenerationRef.current += 1;
         clearHoverTimeout();
         hoverRootRef.current = null;
-        return;
+        abortActivePlayback();
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn("[voice-assistant] mouseout failed", error);
+        }
       }
-
-      clearUnhoverStopTimeout();
-      clearHoverTimeout();
-      unhoverStopTimeoutRef.current = setTimeout(() => {
-        unhoverStopTimeoutRef.current = null;
-        hoverRootRef.current = null;
-        stopPlayback();
-      }, UNHOVER_STOP_DELAY_MS);
     };
 
     const onClick = (event) => {
-      const text = extractReadableText(event.target);
-      if (!text) {
-        return;
+      try {
+        const text = extractReadableText(event.target);
+        if (!text) {
+          return;
+        }
+        clearHoverTimeout();
+        hoverSpeakGenerationRef.current += 1;
+        hoverRootRef.current = null;
+        void speakText(text);
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn("[voice-assistant] click failed", error);
+        }
       }
-      clearUnhoverStopTimeout();
-      clearHoverTimeout();
-      hoverSpeakGenerationRef.current += 1;
-      hoverRootRef.current = null;
-      void speakText(text);
     };
 
     document.addEventListener("mouseover", onMouseOver, true);
@@ -430,13 +474,11 @@ export default function useVoiceAssistantState(lang) {
       document.removeEventListener("mouseout", onMouseOut, true);
       document.removeEventListener("click", onClick, true);
       clearHoverTimeout();
-      clearUnhoverStopTimeout();
       hoverRootRef.current = null;
     };
   }, [
     abortActivePlayback,
     clearHoverTimeout,
-    clearUnhoverStopTimeout,
     isEnabled,
     speakText,
     stopPlayback,
