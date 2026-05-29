@@ -18,7 +18,7 @@ import {
 } from "react-icons/md";
 import clsx from "clsx";
 import LanguageSwitcher from "./LanguageSwitcher";
-import useVoiceAssistant from "../hooks/useVoiceAssistant";
+import { useVoiceAssistant } from "../hooks/useVoiceAssistant";
 import useUiPreferences from "../hooks/useUiPreferences";
 import enLogo from "../assets/images/en-logo.png";
 import kaLogo from "../assets/images/ka-logo.png";
@@ -28,7 +28,7 @@ export default function SiteHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { isEnabled, setIsEnabled } = useVoiceAssistant(language);
+  const { isEnabled, toggleEnabled } = useVoiceAssistant();
   const { fontScale, increaseFontSize, theme, toggleTheme } =
     useUiPreferences();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -258,7 +258,10 @@ export default function SiteHeader() {
             </button>
             <button
               type="button"
-              onClick={() => setIsEnabled(!isEnabled)}
+              onClick={(event) => {
+                event.stopPropagation();
+                void toggleEnabled();
+              }}
               aria-label={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
               title={isEnabled ? t("voiceEnabled") : t("voiceDisabled")}
               className="cursor-pointer"
