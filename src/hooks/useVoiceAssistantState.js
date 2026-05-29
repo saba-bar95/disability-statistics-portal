@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { flushSync } from "react-dom";
 
 const INTERACTIVE_TAGS = new Set([
@@ -172,54 +178,51 @@ export default function useVoiceAssistantState(lang) {
     }
   }, [clearHoverTimeout, clearUnhoverStopTimeout]);
 
-  const playAudioUrl = useCallback(
-    (audioUrl, token) => {
-      return new Promise((resolve, reject) => {
-        if (token !== playbackTokenRef.current) {
-          resolve();
-          return;
+  const playAudioUrl = useCallback((audioUrl, token) => {
+    return new Promise((resolve, reject) => {
+      if (token !== playbackTokenRef.current) {
+        resolve();
+        return;
+      }
+
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      let timeoutId = null;
+
+      const cleanup = () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
         }
+        audio.onended = null;
+        audio.onerror = null;
+        if (audioRef.current === audio) {
+          audioRef.current = null;
+        }
+      };
 
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
-        let timeoutId = null;
+      audio.onended = () => {
+        cleanup();
+        audioUnlockedRef.current = true;
+        resolve();
+      };
 
-        const cleanup = () => {
-          if (timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
-          }
-          audio.onended = null;
-          audio.onerror = null;
-          if (audioRef.current === audio) {
-            audioRef.current = null;
-          }
-        };
+      audio.onerror = () => {
+        cleanup();
+        reject(new Error("Cloud TTS audio playback failed."));
+      };
 
-        audio.onended = () => {
-          cleanup();
-          audioUnlockedRef.current = true;
-          resolve();
-        };
+      timeoutId = setTimeout(() => {
+        cleanup();
+        reject(new Error("Cloud TTS audio playback timed out."));
+      }, PLAYBACK_TIMEOUT_MS);
 
-        audio.onerror = () => {
-          cleanup();
-          reject(new Error("Cloud TTS audio playback failed."));
-        };
-
-        timeoutId = setTimeout(() => {
-          cleanup();
-          reject(new Error("Cloud TTS audio playback timed out."));
-        }, PLAYBACK_TIMEOUT_MS);
-
-        audio.play().catch((error) => {
-          cleanup();
-          reject(error);
-        });
+      audio.play().catch((error) => {
+        cleanup();
+        reject(error);
       });
-    },
-    [],
-  );
+    });
+  }, []);
 
   const speakWithRemote = useCallback(
     async (text, token) => {
@@ -272,7 +275,8 @@ export default function useVoiceAssistantState(lang) {
   );
 
   const unlockAudioFromGesture = useCallback(async () => {
-    const warmupText = WARMUP_TEXT_BY_LANG[remoteLang] ?? WARMUP_TEXT_BY_LANG.en;
+    const warmupText =
+      WARMUP_TEXT_BY_LANG[remoteLang] ?? WARMUP_TEXT_BY_LANG.en;
     const audioUrl = buildTtsUrl(warmupText, remoteLang);
 
     try {
@@ -421,5 +425,11 @@ export default function useVoiceAssistantState(lang) {
     stopPlayback,
   ]);
 
-  return { isEnabled, setIsEnabled, toggleEnabled, stop: stopPlayback, speak: speakText };
+  return {
+    isEnabled,
+    setIsEnabled,
+    toggleEnabled,
+    stop: stopPlayback,
+    speak: speakText,
+  };
 }
