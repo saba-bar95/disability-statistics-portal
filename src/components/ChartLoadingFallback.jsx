@@ -7,6 +7,8 @@ export default function ChartLoadingFallback() {
 
   return (
     <p
+      data-no-tts="true"
+      data-sector-chart="true"
       className={clsx(
         "py-6 text-center text-xs text-slate-600",
         "sm:text-sm dark:text-slate-400",

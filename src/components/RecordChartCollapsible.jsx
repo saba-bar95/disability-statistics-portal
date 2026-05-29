@@ -38,6 +38,7 @@ export default function RecordChartCollapsible({ open, children, className }) {
 
   return (
     <div
+      data-no-tts="true"
       className={clsx(
         "grid ease-in-out motion-reduce:transition-none",
         "transition-[grid-template-rows,opacity,margin-top]",

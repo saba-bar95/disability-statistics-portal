@@ -18,7 +18,11 @@ export default function RecordChartHeader({
 
   if (title) {
     return (
-      <header className="mb-3 md:mb-4">
+      <header
+        className="mb-3 md:mb-4"
+        data-no-tts="true"
+        data-sector-chart="true"
+      >
         <h3 className="text-center text-xs leading-snug font-semibold whitespace-pre-line text-[#051036] md:text-sm lg:text-base dark:text-slate-100">
           {title}
         </h3>

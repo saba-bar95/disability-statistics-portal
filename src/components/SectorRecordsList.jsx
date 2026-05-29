@@ -367,27 +367,29 @@ export default function SectorRecordsList({ sector }) {
                     )}
                   </div>
                   {chartData ? (
-                    <RecordChartCollapsible
-                      open={chartExpanded}
-                      className={clsx(
-                        chartExpanded ? "mt-3 min-[501px]:mt-4" : "mt-0",
-                      )}
-                    >
-                      <Suspense fallback={<ChartLoadingFallback />}>
-                        <LazyRecordChartPanel
-                          chartData={chartData}
-                          language={language}
-                          sector={sector}
-                          recordId={record.ID}
-                          title={getRecordChartDisplayTitle(
-                            record,
-                            sector,
-                            language,
-                            t,
-                          )}
-                        />
-                      </Suspense>
-                    </RecordChartCollapsible>
+                    <div data-no-tts="true" data-sector-chart="true">
+                      <RecordChartCollapsible
+                        open={chartExpanded}
+                        className={clsx(
+                          chartExpanded ? "mt-3 min-[501px]:mt-4" : "mt-0",
+                        )}
+                      >
+                        <Suspense fallback={<ChartLoadingFallback />}>
+                          <LazyRecordChartPanel
+                            chartData={chartData}
+                            language={language}
+                            sector={sector}
+                            recordId={record.ID}
+                            title={getRecordChartDisplayTitle(
+                              record,
+                              sector,
+                              language,
+                              t,
+                            )}
+                          />
+                        </Suspense>
+                      </RecordChartCollapsible>
+                    </div>
                   ) : null}
                 </li>
               );

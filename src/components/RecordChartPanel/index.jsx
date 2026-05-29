@@ -86,7 +86,11 @@ export default function RecordChartPanel({
   );
 
   return (
-    <div className={clsx(CHART_WRAPPER_CLASS, className)}>
+    <div
+      className={clsx(CHART_WRAPPER_CLASS, className)}
+      data-no-tts="true"
+      data-sector-chart="true"
+    >
       <RecordChartHeader
         title={title}
         chartType={chartType}
