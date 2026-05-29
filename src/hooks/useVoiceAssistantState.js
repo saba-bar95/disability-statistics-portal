@@ -144,6 +144,7 @@ export default function useVoiceAssistantState(lang) {
   const hoverTimeoutRef = useRef(null);
   const unhoverStopTimeoutRef = useRef(null);
   const hoverRootRef = useRef(null);
+  const hoverSpeakGenerationRef = useRef(0);
 
   const normalizedLang = lang === "ka" || lang === "en" ? lang : "en";
   const remoteLang = TTS_API_LANG_MAP[normalizedLang];
@@ -162,12 +163,9 @@ export default function useVoiceAssistantState(lang) {
     }
   }, []);
 
-  const stopPlayback = useCallback(() => {
+  /** Stop audio/TTS without clearing hover timers (used when switching targets). */
+  const abortActivePlayback = useCallback(() => {
     playbackTokenRef.current += 1;
-    clearHoverTimeout();
-    clearUnhoverStopTimeout();
-    hoverRootRef.current = null;
-
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = "";
@@ -176,7 +174,14 @@ export default function useVoiceAssistantState(lang) {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-  }, [clearHoverTimeout, clearUnhoverStopTimeout]);
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    abortActivePlayback();
+    clearHoverTimeout();
+    clearUnhoverStopTimeout();
+    hoverRootRef.current = null;
+  }, [abortActivePlayback, clearHoverTimeout, clearUnhoverStopTimeout]);
 
   const playAudioUrl = useCallback((audioUrl, token) => {
     return new Promise((resolve, reject) => {
@@ -252,15 +257,11 @@ export default function useVoiceAssistantState(lang) {
         return;
       }
 
-      if (audioRef.current || window.speechSynthesis?.speaking) {
-        stopPlayback();
-      }
+      abortActivePlayback();
+      const token = playbackTokenRef.current;
 
       lastSpokenRef.current = cleaned;
       lastSpokenAtRef.current = now;
-
-      const token = playbackTokenRef.current + 1;
-      playbackTokenRef.current = token;
 
       try {
         await speakWithRemote(cleaned, token);
@@ -271,7 +272,7 @@ export default function useVoiceAssistantState(lang) {
         speakWithBrowserTts(cleaned, normalizedLang);
       }
     },
-    [normalizedLang, speakWithRemote, stopPlayback],
+    [abortActivePlayback, normalizedLang, speakWithRemote],
   );
 
   const unlockAudioFromGesture = useCallback(async () => {
@@ -347,11 +348,25 @@ export default function useVoiceAssistantState(lang) {
         return;
       }
 
+      const isSwitchingElement =
+        hoverRootRef.current && hoverRootRef.current !== root;
+
       clearUnhoverStopTimeout();
       clearHoverTimeout();
+
+      if (isSwitchingElement) {
+        abortActivePlayback();
+      }
+
       hoverRootRef.current = root;
+      hoverSpeakGenerationRef.current += 1;
+      const speakGeneration = hoverSpeakGenerationRef.current;
+
       hoverTimeoutRef.current = setTimeout(() => {
         hoverTimeoutRef.current = null;
+        if (speakGeneration !== hoverSpeakGenerationRef.current) {
+          return;
+        }
         void speakText(text);
       }, HOVER_SPEAK_DELAY_MS);
     };
@@ -401,6 +416,7 @@ export default function useVoiceAssistantState(lang) {
       }
       clearUnhoverStopTimeout();
       clearHoverTimeout();
+      hoverSpeakGenerationRef.current += 1;
       hoverRootRef.current = null;
       void speakText(text);
     };
@@ -418,6 +434,7 @@ export default function useVoiceAssistantState(lang) {
       hoverRootRef.current = null;
     };
   }, [
+    abortActivePlayback,
     clearHoverTimeout,
     clearUnhoverStopTimeout,
     isEnabled,
